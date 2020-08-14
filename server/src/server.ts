@@ -6,6 +6,7 @@ import cors from "cors";
 import helmet from "helmet";
 
 import initializeDB from "./utils/db";
+import userRouter from "./resources/user";
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ if (!process.env.PORT) {
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
-// Creates connection to DB
+// Creates connection to Database
 initializeDB();
 
 // Creates instance of an express application
@@ -30,6 +31,9 @@ const app = express();
 app.use(helmet()); // Middleware functions that set HTTP resp headers
 app.use(cors()); // Enables CORS requests
 app.use(express.json()); // Parses incoming requests with JSON payloads
+
+// Routes
+app.use("/api/users", userRouter);
 
 /** Server Activation */
 
