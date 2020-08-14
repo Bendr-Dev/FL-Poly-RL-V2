@@ -5,6 +5,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 
+import initializeDB from "./utils/db";
+
 dotenv.config();
 
 /** App Variables */
@@ -15,6 +17,9 @@ if (!process.env.PORT) {
 }
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
+
+// Creates connection to DB
+initializeDB();
 
 // Creates instance of an express application
 const app = express();
