@@ -8,7 +8,7 @@ const nodeExternals = require("webpack-node-externals");
  * Defines the directory where webpack should store the compiled source files
  */
 module.exports = {
-  entry: ["webpack/hot/poll?100", "./src/index.ts"],
+  entry: ["webpack/hot/poll?100", "./src/server.ts"],
   watch: true,
   target: "node",
   externals: [
@@ -32,6 +32,6 @@ module.exports = {
   plugins: [new webpack.HotModuleReplacementPlugin()],
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "index.js",
+    filename: "server.js",
   },
 };
