@@ -4,6 +4,7 @@ import { check, validationResult } from "express-validator";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
+import auth from "../utils/middleware/auth";
 
 const userRouter = express.Router();
 
