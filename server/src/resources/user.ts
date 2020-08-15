@@ -85,6 +85,7 @@ userRouter.post(
       // Return webtoken
       const payload = {
         id: newUser.id,
+        role: newUser.role,
       };
 
       const accessToken = jwt.sign(payload, JWTSecret as string, {
@@ -145,6 +146,7 @@ userRouter.post(
       // Return webtoken
       const payload = {
         id: user.id,
+        role: user.role,
       };
 
       const accessToken = jwt.sign(payload, JWTSecret as string, {
@@ -225,6 +227,7 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
     // Return webtoken
     const payload = {
       id: decoded.id,
+      role: decoded.role,
     };
 
     const accessToken = jwt.sign(payload, JWTSecret as string, {
