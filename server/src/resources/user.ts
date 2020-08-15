@@ -97,7 +97,7 @@ userRouter.post(
 
       res
         .status(201)
-        .cookie("x-refresh-token", refreshToken)
+        .cookie("x-refresh-token", refreshToken, { httpOnly: true })
         .json({ accessToken });
     } catch (err) {
       console.error(err);
@@ -156,7 +156,7 @@ userRouter.post(
 
       res
         .status(200)
-        .cookie("x-refresh-token", refreshToken)
+        .cookie("x-refresh-token", refreshToken, { httpOnly: true })
         .json({ accessToken });
     } catch (err) {
       console.error(err);
@@ -193,10 +193,6 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
   } catch (err) {
     res.status(401).json({ error: { msg: "Token is not valid" } });
   }
-});
-
-userRouter.get("/test", auth, (req, res) => {
-  res.send("test");
 });
 
 export default userRouter;
