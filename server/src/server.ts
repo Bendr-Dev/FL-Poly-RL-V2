@@ -14,6 +14,7 @@ dotenv.config();
 
 // Check if port was loaded into process environment
 if (!process.env.PORT) {
+  console.log("Error finding environment variable PORT");
   process.exit(1);
 }
 
