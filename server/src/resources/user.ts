@@ -258,4 +258,44 @@ userRouter.get("/me", auth, async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Updates user data
+ * PUT/edit
+ */
+userRouter.put("/edit", auth, async (req: Request, res: Response) => {
+  try {
+    // Grab user
+    let user = await User.findById(req.body.user);
+
+    if (!user) {
+      return res.status(400).json({
+        error: { msg: "The user you are trying to update doesn't exist" },
+      });
+    }
+
+    // Deconstruct request
+    const { username, name, steam64Id, discordId } = req.body;
+
+    // Create updated user object containing the fields that are not undefined
+    const updatedUser: any = {};
+
+    !!username && (updatedUser.username = username);
+    !!name && (updatedUser.name = name);
+    !!steam64Id && (updatedUser.steam64Id = steam64Id);
+    !!discordId && (updatedUser.discordId = discordId);
+
+    // Update user
+    user = await User.findByIdAndUpdate(
+      req.body.user,
+      { $set: updatedUser },
+      { new: true }
+    );
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error while trying to update user");
+  }
+});
+
 export default userRouter;
