@@ -1,7 +1,17 @@
 import { IUser } from "../../../common/interfaces/User.Interface";
 import mongoose, { Schema, Document } from "mongoose";
+import * as dotenv from "dotenv";
 
 interface IUserDocument extends Document, IUser {}
+
+// Work-around for HMR OverrideModelError
+dotenv.config();
+
+const isDev = process.env.IS_DEV;
+
+if (isDev) {
+  delete mongoose.connection.models["User"];
+}
 
 const UserSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },
