@@ -92,4 +92,55 @@ userRouter.post(
   }
 );
 
+/**
+ * Route logging in an existing user
+ * @name POST/login
+ */
+userRouter.post(
+  "/login",
+  [
+    check("email", "Please include a valid email").isEmail(),
+    check("password", "Password is required").not().isEmpty(),
+  ],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors);
+    }
+
+    try {
+      // Deconstruct request
+      const { email, password } = req.body;
+
+      // Check if user exists
+      let user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(400).json({ error: { msg: "Invalid Credentials" } });
+      }
+
+      // Check password
+      const isMatch = await bcrypt.compare(password, user.password as string);
+
+      if (!isMatch) {
+        return res.status(400).json({ error: { msg: "Invalid Credentials" } });
+      }
+
+      // Return webtoken
+      const payload = {
+        id: user.id,
+      };
+
+      jwt.sign(payload, JWTSecret as string, { expiresIn }, (err, token) => {
+        if (err) throw err;
+        res.status(200).json({ token });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
 export default userRouter;
