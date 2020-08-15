@@ -87,25 +87,18 @@ userRouter.post(
         id: newUser.id,
       };
 
-      const accessToken = jwt.sign(
-        payload,
-        JWTSecret as string,
-        { expiresIn: accessExpiresIn },
-        (err) => {
-          if (err) throw err;
-        }
-      );
+      const accessToken = jwt.sign(payload, JWTSecret as string, {
+        expiresIn: accessExpiresIn,
+      });
 
-      const refreshToken = jwt.sign(
-        payload,
-        JWTSecret as string,
-        { expiresIn: refreshExpiresIn },
-        (err) => {
-          if (err) throw err;
-        }
-      );
+      const refreshToken = jwt.sign(payload, JWTRefresh as string, {
+        expiresIn: refreshExpiresIn,
+      });
 
-      res.status(201).json({ accessToken, refreshToken });
+      res
+        .status(201)
+        .cookie("x-refresh-token", refreshToken)
+        .json({ accessToken });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
@@ -153,30 +146,57 @@ userRouter.post(
         id: user.id,
       };
 
-      const accessToken = jwt.sign(
-        payload,
-        JWTSecret as string,
-        { expiresIn: accessExpiresIn },
-        (err) => {
-          if (err) throw err;
-        }
-      );
+      const accessToken = jwt.sign(payload, JWTSecret as string, {
+        expiresIn: accessExpiresIn,
+      });
 
-      const refreshToken = jwt.sign(
-        payload,
-        JWTSecret as string,
-        { expiresIn: refreshExpiresIn },
-        (err) => {
-          if (err) throw err;
-        }
-      );
+      const refreshToken = jwt.sign(payload, JWTRefresh as string, {
+        expiresIn: refreshExpiresIn,
+      });
 
-      res.status(200).json({ accessToken, refreshToken });
+      res
+        .status(200)
+        .cookie("x-refresh-token", refreshToken)
+        .json({ accessToken });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
     }
   }
 );
+
+/**
+ * Refresh the access token if refresh token is valid
+ */
+userRouter.post("/refresh", (req: Request, res: Response) => {
+  const refreshToken = req.cookies["x-refresh-token"];
+
+  // Check token's existence
+  if (!refreshToken) {
+    return res
+      .status(401)
+      .json({ error: { msg: "No token found, authorization denied" } });
+  }
+  try {
+    const decoded = jwt.verify(refreshToken, JWTRefresh as string) as any;
+
+    // Return webtoken
+    const payload = {
+      id: decoded.id,
+    };
+
+    const accessToken = jwt.sign(payload, JWTSecret as string, {
+      expiresIn: accessExpiresIn,
+    });
+
+    res.status(200).json({ accessToken });
+  } catch (err) {
+    res.status(401).json({ error: { msg: "Token is not valid" } });
+  }
+});
+
+userRouter.get("/test", auth, (req, res) => {
+  res.send("test");
+});
 
 export default userRouter;

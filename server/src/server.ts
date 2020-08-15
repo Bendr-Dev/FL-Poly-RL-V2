@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import CookieParser from "cookie-parser";
 
 import initializeDB from "./utils/db";
 import userRouter from "./resources/user";
@@ -31,6 +32,7 @@ const app = express();
 // Mount middleware to entry point
 app.use(helmet()); // Middleware functions that set HTTP resp headers
 app.use(cors()); // Enables CORS requests
+app.use(CookieParser());
 app.use(express.json()); // Parses incoming requests with JSON payloads
 
 // Routes
