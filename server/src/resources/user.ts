@@ -5,7 +5,6 @@ import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import auth from "../utils/middleware/auth";
-import { IUser } from "../../../common/interfaces/User.Interface";
 
 const userRouter = express.Router();
 
