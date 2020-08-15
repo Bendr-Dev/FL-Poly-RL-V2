@@ -5,6 +5,7 @@ import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import auth from "../utils/middleware/auth";
+import { IUser } from "../../../common/interfaces/User.Interface";
 
 const userRouter = express.Router();
 
@@ -142,5 +143,45 @@ userRouter.post(
     }
   }
 );
+
+/**
+ * Get all users
+ * @name GET/
+ */
+userRouter.get("/", async (res: Response) => {
+  try {
+    // Grabs all users from database
+    const users = await User.find().select("-password");
+
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+/**
+ * Get a user by id
+ * @name GET/:id
+ */
+userRouter.get("/:userId", async (req: Request, res: Response) => {
+  try {
+    // Get user by id
+    const user = await User.findById(req.params.userId).select("-password");
+
+    // Check if user exists
+    if (!user) {
+      return res.status(400).json({
+        error: { msg: `Couldn't find user with Id: ${req.params.userId} ` },
+      });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      error: { msg: `Couldn't find user with Id: ${req.params.userId} ` },
+    });
+  }
+});
 
 export default userRouter;
