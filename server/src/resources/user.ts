@@ -12,8 +12,14 @@ dotenv.config();
 
 const JWTSecret = process.env.JWT_SECRET;
 const isDev = process.env.IS_DEV;
+const JWTRefresh = process.env.JWT_REFRESH_SECRET;
 
-const expiresIn = isDev ? 360000 : 14400;
+const accessExpiresIn = isDev
+  ? 360000
+  : parseInt(process.env.JWT_EXPIRES as string, 10);
+const refreshExpiresIn = isDev
+  ? 360000
+  : parseInt(process.env.JWT_REFRESH_EXPIRES as string, 10);
 
 /**
  * Route registering a single user
@@ -81,10 +87,25 @@ userRouter.post(
         id: newUser.id,
       };
 
-      jwt.sign(payload, JWTSecret as string, { expiresIn }, (err, token) => {
-        if (err) throw err;
-        res.status(201).json({ token });
-      });
+      const accessToken = jwt.sign(
+        payload,
+        JWTSecret as string,
+        { expiresIn: accessExpiresIn },
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        payload,
+        JWTSecret as string,
+        { expiresIn: refreshExpiresIn },
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      res.status(201).json({ accessToken, refreshToken });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
@@ -132,10 +153,25 @@ userRouter.post(
         id: user.id,
       };
 
-      jwt.sign(payload, JWTSecret as string, { expiresIn }, (err, token) => {
-        if (err) throw err;
-        res.status(200).json({ token });
-      });
+      const accessToken = jwt.sign(
+        payload,
+        JWTSecret as string,
+        { expiresIn: accessExpiresIn },
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        payload,
+        JWTSecret as string,
+        { expiresIn: refreshExpiresIn },
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      res.status(200).json({ accessToken, refreshToken });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
