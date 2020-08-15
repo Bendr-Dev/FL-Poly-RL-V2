@@ -166,6 +166,46 @@ userRouter.post(
 );
 
 /**
+ * Get all users
+ * @name GET/all
+ */
+userRouter.get("/all", async (req: Request, res: Response) => {
+  try {
+    // Grabs all users from database
+    const users = await User.find().select("-password");
+
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+/**
+ * Get a user by id
+ * @name GET/:id
+ */
+userRouter.get("/id/:userId", async (req: Request, res: Response) => {
+  try {
+    // Get user by id
+    const user = await User.findById(req.params.userId).select("-password");
+
+    // Check if user exists
+    if (!user) {
+      return res.status(400).json({
+        error: { msg: `Couldn't find user with Id: ${req.params.userId} ` },
+      });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      error: { msg: `Couldn't find user with Id: ${req.params.userId} ` },
+    });
+  }
+});
+
+/**
  * Refresh the access token if refresh token is valid
  */
 userRouter.post("/refresh", (req: Request, res: Response) => {
@@ -192,6 +232,29 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
     res.status(200).json({ accessToken });
   } catch (err) {
     res.status(401).json({ error: { msg: "Token is not valid" } });
+  }
+});
+
+/**
+ * Get logged in user data
+ * @name GET/me
+ */
+userRouter.get("/me", auth, async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.body.user).select("-password");
+
+    if (!user) {
+      return res.status(400).json({
+        error: { msg: `Couldn't find logged in user data` },
+      });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: { msg: `Couldn't find logged in user data` },
+    });
   }
 });
 
