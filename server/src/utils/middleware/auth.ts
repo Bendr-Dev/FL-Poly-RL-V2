@@ -7,7 +7,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   const JWTSecret = process.env.JWT_SECRET;
 
   // Grab token from header
-  const token = req.header("x-auth-token");
+  const token = req.cookies["x-auth-token"];
 
   // Check token's existence
   if (!token) {

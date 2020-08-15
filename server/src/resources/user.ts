@@ -98,7 +98,8 @@ userRouter.post(
       res
         .status(201)
         .cookie("x-refresh-token", refreshToken, { httpOnly: true })
-        .json({ accessToken });
+        .cookie("x-auth-token", accessToken, { httpOnly: true })
+        .json({ login: true });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
@@ -157,7 +158,8 @@ userRouter.post(
       res
         .status(200)
         .cookie("x-refresh-token", refreshToken, { httpOnly: true })
-        .json({ accessToken });
+        .cookie("x-auth-token", accessToken, { httpOnly: true })
+        .json({ login: true });
     } catch (err) {
       console.error(err);
       res.status(500).send("Server Error");
@@ -229,7 +231,10 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
       expiresIn: accessExpiresIn,
     });
 
-    res.status(200).json({ accessToken });
+    res
+      .status(200)
+      .cookie("x-auth-token", accessToken, { httpOnly: true })
+      .json({ login: true });
   } catch (err) {
     res.status(401).json({ error: { msg: "Token is not valid" } });
   }
@@ -296,6 +301,17 @@ userRouter.put("/edit", auth, async (req: Request, res: Response) => {
     console.log(err);
     res.status(500).send("Server Error while trying to update user");
   }
+});
+
+/**
+ * Logs out user
+ * POST/logout
+ */
+userRouter.post("/logout", (req: Request, res: Response) => {
+  res.clearCookie("x-auth-token");
+  res.clearCookie("x-refresh-token");
+
+  res.status(200).json({ logout: true });
 });
 
 export default userRouter;
