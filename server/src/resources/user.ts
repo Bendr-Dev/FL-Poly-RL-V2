@@ -265,7 +265,7 @@ userRouter.get("/me", auth, async (req: Request, res: Response) => {
 userRouter.put("/edit", auth, async (req: Request, res: Response) => {
   try {
     // Grab user
-    let user = await User.findById(req.body.user);
+    let user = await User.findById(req.body.user).select("-password");
 
     if (!user) {
       return res.status(400).json({
@@ -289,7 +289,7 @@ userRouter.put("/edit", auth, async (req: Request, res: Response) => {
       req.body.user,
       { $set: updatedUser },
       { new: true }
-    );
+    ).select("-password");
 
     res.status(200).json(user);
   } catch (err) {
