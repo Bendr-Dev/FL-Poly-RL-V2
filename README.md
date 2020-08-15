@@ -27,7 +27,7 @@ Leave both terminals open.
 
 ## Running the frontend
 
-In order to run the backend, first ensure you are in the `/server` directory.
+In order to run the backend, first ensure you are in the `/client` directory.
 
 After this, run `npm install` to install dependencies.
 
