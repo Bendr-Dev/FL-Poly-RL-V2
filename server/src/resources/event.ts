@@ -3,7 +3,6 @@ import { check, validationResult } from "express-validator";
 import Event from "../models/Event";
 import roles from "../utils/middleware/roles";
 import auth from "../utils/middleware/auth";
-import userRouter from "./user";
 
 const eventRouter = express.Router();
 
