@@ -103,7 +103,9 @@ userRouter.post(
         .json({ login: true });
     } catch (err) {
       console.error(err);
-      res.status(500).send("Server Error");
+      res
+        .status(500)
+        .json({ error: { msg: "Server error while trying to register user" } });
     }
   }
 );
@@ -164,7 +166,9 @@ userRouter.post(
         .json({ login: true });
     } catch (err) {
       console.error(err);
-      res.status(500).send("Server Error");
+      res
+        .status(500)
+        .json({ error: { msg: "Server error while trying to login user" } });
     }
   }
 );
@@ -181,6 +185,9 @@ userRouter.get("/all", async (req: Request, res: Response) => {
     res.status(200).json(users);
   } catch (err) {
     console.error(err);
+    res
+      .status(500)
+      .json({ error: { msg: "Server error while trying to get all users" } });
   }
 });
 
@@ -203,8 +210,10 @@ userRouter.get("/id/:userId", async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (err) {
     console.error(err);
-    res.status(400).json({
-      error: { msg: `Couldn't find user with Id: ${req.params.userId} ` },
+    res.status(500).json({
+      error: {
+        msg: `Server error couldn't find user with Id: ${req.params.userId} `,
+      },
     });
   }
 });
@@ -239,7 +248,8 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
       .cookie("x-auth-token", accessToken, { httpOnly: true })
       .json({ login: true });
   } catch (err) {
-    res.status(401).json({ error: { msg: "Token is not valid" } });
+    console.log(err);
+    res.status(500).json({ error: { msg: "Server error token is not valid" } });
   }
 });
 
@@ -260,8 +270,8 @@ userRouter.get("/me", auth, async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (err) {
     console.log(err);
-    return res.status(400).json({
-      error: { msg: `Couldn't find logged in user data` },
+    return res.status(500).json({
+      error: { msg: `Server error couldn't find logged in user data` },
     });
   }
 });
@@ -302,7 +312,9 @@ userRouter.put("/edit", auth, async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Server Error while trying to update user");
+    res
+      .status(500)
+      .json({ error: { msg: "Server error while trying to update user" } });
   }
 });
 
@@ -311,10 +323,17 @@ userRouter.put("/edit", auth, async (req: Request, res: Response) => {
  * POST/logout
  */
 userRouter.post("/logout", (req: Request, res: Response) => {
-  res.clearCookie("x-auth-token");
-  res.clearCookie("x-refresh-token");
+  try {
+    res.clearCookie("x-auth-token");
+    res.clearCookie("x-refresh-token");
 
-  res.status(200).json({ logout: true });
+    res.status(200).json({ logout: true });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ error: { msg: "Server error while trying to logout user" } });
+  }
 });
 
 export default userRouter;
