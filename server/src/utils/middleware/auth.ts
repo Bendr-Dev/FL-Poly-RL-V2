@@ -21,7 +21,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, JWTSecret as string) as any;
 
     req.body.user = decoded["id"];
-    req.body.role = decoded["role"];
+    req.body.currentRole = decoded["role"];
     next();
   } catch {
     res.status(401).json({ error: { msg: "Token is not valid" } });

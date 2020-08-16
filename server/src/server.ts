@@ -8,6 +8,7 @@ import CookieParser from "cookie-parser";
 
 import initializeDB from "./utils/db";
 import userRouter from "./resources/user";
+import adminUserRouter from "./admin/resources/user";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(express.json()); // Parses incoming requests with JSON payloads
 
 // Routes
 app.use("/api/users", userRouter);
+app.use("/admin/users", adminUserRouter);
 
 /** Server Activation */
 

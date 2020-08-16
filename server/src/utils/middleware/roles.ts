@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 export default (
   roles: ("Guest" | "Player" | "Coach" | "Manager" | "Admin")[]
 ) => (req: Request, res: Response, next: NextFunction) => {
-  const role = req.body.role || "";
+  const role = req.body.currentRole || "";
 
   if (role && roles.includes(role)) {
     next();
