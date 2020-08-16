@@ -164,4 +164,41 @@ eventRouter.put(
   }
 );
 
+/**
+ * Delete event with id
+ * DELETE/delete/:eventId
+ */
+eventRouter.delete(
+  "/delete/:eventId",
+  [auth, roles(["Admin", "Coach", "Manager", "Player"])],
+  async (req: Request, res: Response) => {
+    try {
+      // Check event existence
+      const event = await Event.findById(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).json({
+          error: {
+            msg: `Event with id ${req.params.eventId} could not be found`,
+          },
+        });
+      }
+
+      // Delete event
+      await Event.findByIdAndDelete(req.params.eventId);
+
+      res.status(200).json({
+        msg: `Event with id ${req.params.eventId} was successfully deleted`,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        error: {
+          msg: `Server error trying to delete event with id ${req.params.eventId}`,
+        },
+      });
+    }
+  }
+);
+
 export default eventRouter;
