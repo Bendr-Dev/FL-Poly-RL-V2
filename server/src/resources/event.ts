@@ -65,6 +65,7 @@ eventRouter.get("/", auth, async (req: Request, res: Response) => {
       "steam64Id",
       "name",
       "discordId",
+      "username",
     ]);
 
     res.status(200).json(events);
@@ -84,7 +85,7 @@ eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
   try {
     const event = await Event.findById(req.params.eventId).populate(
       "attending",
-      ["email", "steam64Id", "name", "discordId"]
+      ["email", "steam64Id", "username", "discordId", "name"]
     );
 
     if (!event) {
@@ -105,5 +106,99 @@ eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
     });
   }
 });
+
+/**
+ * Edits event with id
+ * PUT/edit/:eventId
+ */
+eventRouter.put(
+  "/edit/:eventId",
+  [auth, roles(["Admin", "Coach", "Manager", "Player"])],
+  async (req: Request, res: Response) => {
+    try {
+      // Grab event from DB
+      let event = await Event.findById(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).json({
+          error: {
+            msg: `Event with id ${req.params.eventId} could not be found`,
+          },
+        });
+      }
+
+      // Deconstruct request
+      const { type, format, attending, link, time } = req.body;
+
+      // Updated event
+      const updatedEvent: any = {};
+
+      !!type && (updatedEvent.type = type);
+      !!format && (updatedEvent.format = format);
+      !!attending && (updatedEvent.attending = attending);
+      !!link && (updatedEvent.link = link);
+      !!time && (updatedEvent.time = time);
+
+      // Update event in DB
+      event = await Event.findByIdAndUpdate(
+        req.params.eventId,
+        { $set: updatedEvent },
+        { new: true }
+      ).populate("attending", [
+        "email",
+        "steam64Id",
+        "username",
+        "discordId",
+        "name",
+      ]);
+
+      res.status(200).json(event);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        error: {
+          msg: `Server error while trying to edit event with id ${req.params.eventId}`,
+        },
+      });
+    }
+  }
+);
+
+/**
+ * Delete event with id
+ * DELETE/delete/:eventId
+ */
+eventRouter.delete(
+  "/delete/:eventId",
+  [auth, roles(["Admin", "Coach", "Manager", "Player"])],
+  async (req: Request, res: Response) => {
+    try {
+      // Check event existence
+      const event = await Event.findById(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).json({
+          error: {
+            msg: `Event with id ${req.params.eventId} could not be found`,
+          },
+        });
+      }
+
+      // Delete event
+      await Event.findByIdAndDelete(req.params.eventId);
+
+      res.status(200).json({
+        msg: `Event with id ${req.params.eventId} was successfully deleted`,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        error: {
+          msg: `Server error trying to delete event with id ${req.params.eventId}`,
+        },
+      });
+    }
+  }
+);
 
 export default eventRouter;
