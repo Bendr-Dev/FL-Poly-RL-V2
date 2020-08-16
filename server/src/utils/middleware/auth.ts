@@ -6,7 +6,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   dotenv.config();
   const JWTSecret = process.env.JWT_SECRET;
 
-  // Grab token from header
+  // Grab token from cookies
   const token = req.cookies["x-auth-token"];
 
   // Check token's existence
