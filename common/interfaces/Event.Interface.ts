@@ -1,6 +1,7 @@
 import { IUser } from "./User.Interface";
 
 export interface IEvent {
+  name: string;
   type: string;
   format: string;
   attending: Pick<

@@ -14,6 +14,7 @@ if (isDev) {
 }
 
 const EventSchema: Schema = new Schema({
+  name: { type: String, required: true },
   type: { type: String, required: true },
   format: { type: String, required: true },
   attending: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

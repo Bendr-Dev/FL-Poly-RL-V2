@@ -15,6 +15,7 @@ eventRouter.post(
   [
     auth,
     roles(["Player", "Coach", "Manager", "Admin"]),
+    check("name", "Name of event is required").not().isEmpty(),
     check("type", "Type of event is required").not().isEmpty(),
     check("time", "Time of event is required").not().isEmpty(),
     check("format", "Format of event is required").not().isEmpty(),
@@ -30,10 +31,11 @@ eventRouter.post(
 
     try {
       // Deconstruct request
-      const { type, format, link, attending, time, uploader } = req.body;
+      const { name, type, format, link, attending, time, uploader } = req.body;
 
       // Create event
       const newEvent = new Event({
+        name,
         type,
         format,
         link,
@@ -150,6 +152,7 @@ eventRouter.put(
 
       // Deconstruct request
       const {
+        name,
         type,
         format,
         attending,
@@ -162,6 +165,7 @@ eventRouter.put(
       // Updated event
       const updatedEvent: any = {};
 
+      !!name && (updatedEvent.name = name);
       !!type && (updatedEvent.type = type);
       !!format && (updatedEvent.format = format);
       !!attending && (updatedEvent.attending = attending);
