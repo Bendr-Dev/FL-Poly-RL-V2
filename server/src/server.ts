@@ -10,6 +10,7 @@ import initializeDB from "./utils/db";
 import userRouter from "./resources/user";
 import adminUserRouter from "./admin/resources/user";
 import eventRouter from "./resources/event";
+import statsRouter from "./resources/stats";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use(express.json()); // Parses incoming requests with JSON payloads
 app.use("/api/users", userRouter);
 app.use("/admin/users", adminUserRouter);
 app.use("/api/events", eventRouter);
+app.use("/api/stats", statsRouter);
 
 /** Server Activation */
 
