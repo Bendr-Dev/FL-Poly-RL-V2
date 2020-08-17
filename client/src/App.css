@@ -1,0 +1,67 @@
+:root {
+  --main-nav-height: 4rem;
+  --card-gray: #202125;
+}
+
+nav.main-nav {
+  background-color: var(--card-gray);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--main-nav-height);
+}
+nav.main-nav h1 {
+  font-size: 1.2rem;
+  margin-left: 1rem;
+}
+
+nav.side-nav {
+  background-color: var(--card-gray);
+  color: #fff;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: flex-start;
+  width: 12.5rem;
+  height: 100%;
+}
+
+div.content-area {
+  display: flex;
+  height: calc(100vh - var(--main-nav-height));
+}
+
+.dashboard {
+  display: grid;
+  grid-template-areas:
+    "events events events events events calendar calendar"
+    "events events events events events calendar calendar"
+    "events events events events events tournament tournament"
+    "events events events events events tournament tournament"
+    "carousel carousel carousel carousel carousel carousel carousel";
+  grid-template-columns: 10px;
+  gap: 1.5rem;
+  margin: 1.5rem;
+  width: 100%;
+}
+
+/** Dashboard Items **/
+.weekly-events {
+  grid-area: events;
+  background-color: var(--card-gray);
+}
+
+.calendar {
+  grid-area: calendar;
+  background-color: var(--card-gray);
+}
+
+.player-carousel {
+  grid-area: carousel;
+  background-color: var(--card-gray);
+}
+
+.recent-tournaments {
+  grid-area: tournament;
+  background-color: var(--card-gray);
+}
