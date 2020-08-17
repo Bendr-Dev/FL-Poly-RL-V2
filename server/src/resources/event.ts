@@ -40,6 +40,7 @@ eventRouter.post(
         attending,
         time,
         uploader,
+        isCompleted: false,
       });
 
       // Add to DB
@@ -148,7 +149,15 @@ eventRouter.put(
       }
 
       // Deconstruct request
-      const { type, format, attending, link, time, uploader } = req.body;
+      const {
+        type,
+        format,
+        attending,
+        link,
+        time,
+        uploader,
+        isCompleted,
+      } = req.body;
 
       // Updated event
       const updatedEvent: any = {};
@@ -159,6 +168,7 @@ eventRouter.put(
       !!link && (updatedEvent.link = link);
       !!time && (updatedEvent.time = time);
       !!uploader && (updatedEvent.uploader = uploader);
+      !!isCompleted && (updatedEvent.isCompleted = isCompleted);
 
       // Update event in DB
       event = await Event.findByIdAndUpdate(

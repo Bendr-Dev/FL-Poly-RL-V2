@@ -20,6 +20,7 @@ const EventSchema: Schema = new Schema({
   link: { type: String, required: true },
   time: { type: Date, required: true },
   uploader: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  isCompleted: { type: Boolean, required: true },
 });
 
 export default mongoose.model<IEventDocument>("Event", EventSchema);
