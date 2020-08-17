@@ -13,4 +13,5 @@ export interface IEvent {
   >;
   link: string;
   time: Date;
+  isCompleted: boolean;
 }
