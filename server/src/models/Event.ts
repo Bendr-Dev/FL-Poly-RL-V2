@@ -19,6 +19,7 @@ const EventSchema: Schema = new Schema({
   attending: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   link: { type: String, required: true },
   time: { type: Date, required: true },
+  uploader: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 export default mongoose.model<IEventDocument>("Event", EventSchema);

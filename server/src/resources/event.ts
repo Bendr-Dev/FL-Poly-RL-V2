@@ -30,7 +30,7 @@ eventRouter.post(
 
     try {
       // Deconstruct request
-      const { type, format, link, attending, time } = req.body;
+      const { type, format, link, attending, time, uploader } = req.body;
 
       // Create event
       const newEvent = new Event({
@@ -39,6 +39,7 @@ eventRouter.post(
         link,
         attending,
         time,
+        uploader,
       });
 
       // Add to DB
@@ -60,13 +61,21 @@ eventRouter.post(
  */
 eventRouter.get("/", auth, async (req: Request, res: Response) => {
   try {
-    const events = await Event.find({}).populate("attending", [
-      "email",
-      "steam64Id",
-      "name",
-      "discordId",
-      "username",
-    ]);
+    const events = await Event.find({})
+      .populate("attending", [
+        "email",
+        "steam64Id",
+        "name",
+        "discordId",
+        "username",
+      ])
+      .populate("uploader", [
+        "email",
+        "steam64Id",
+        "name",
+        "discordId",
+        "username",
+      ]);
 
     res.status(200).json(events);
   } catch (err) {
@@ -83,10 +92,21 @@ eventRouter.get("/", auth, async (req: Request, res: Response) => {
  */
 eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
   try {
-    const event = await Event.findById(req.params.eventId).populate(
-      "attending",
-      ["email", "steam64Id", "username", "discordId", "name"]
-    );
+    const event = await Event.findById(req.params.eventId)
+      .populate("attending", [
+        "email",
+        "steam64Id",
+        "username",
+        "discordId",
+        "name",
+      ])
+      .populate("uploader", [
+        "email",
+        "steam64Id",
+        "name",
+        "discordId",
+        "username",
+      ]);
 
     if (!event) {
       return res.status(404).json({
@@ -128,7 +148,7 @@ eventRouter.put(
       }
 
       // Deconstruct request
-      const { type, format, attending, link, time } = req.body;
+      const { type, format, attending, link, time, uploader } = req.body;
 
       // Updated event
       const updatedEvent: any = {};
@@ -138,19 +158,28 @@ eventRouter.put(
       !!attending && (updatedEvent.attending = attending);
       !!link && (updatedEvent.link = link);
       !!time && (updatedEvent.time = time);
+      !!uploader && (updatedEvent.uploader = uploader);
 
       // Update event in DB
       event = await Event.findByIdAndUpdate(
         req.params.eventId,
         { $set: updatedEvent },
         { new: true }
-      ).populate("attending", [
-        "email",
-        "steam64Id",
-        "username",
-        "discordId",
-        "name",
-      ]);
+      )
+        .populate("attending", [
+          "email",
+          "steam64Id",
+          "username",
+          "discordId",
+          "name",
+        ])
+        .populate("uploader", [
+          "email",
+          "steam64Id",
+          "name",
+          "discordId",
+          "username",
+        ]);
 
       res.status(200).json(event);
     } catch (err) {
