@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { DATE_MAP, DAYS_OF_WEEK } from "../utils/date";
-import { start } from "repl";
 
 interface ICalendarState {
   calendar: { [key: number]: Date }[];
