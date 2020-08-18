@@ -65,9 +65,22 @@ export default () => {
    * and end date from state
    * @param day - the given day to be checked
    */
-  const getCalendarClass = (day: number) => {
-    const classes = ["calendar-day"];
+  const getCalendarClass = (
+    day: number,
+    type: "calendar-day" | "calendar-cell"
+  ) => {
+    const classes: string[] = [type];
     if (day === calendarState.start || day === calendarState.end) {
+      if (type === "calendar-cell") {
+        classes.push("week");
+        if (day === calendarState.start) {
+          classes.push("week-start");
+        }
+        if (day === calendarState.end) {
+          classes.push("week-end");
+        }
+        return classes.join(" ");
+      }
       classes.push("active");
     } else if (day > calendarState.start && day < calendarState.end) {
       classes.push("week");
@@ -90,9 +103,9 @@ export default () => {
     if (day < startOfMonth || day > startOfMonth + daysInMonth - 1) {
       classes.push("not-in-month");
     }
+    console.log(classes);
     return classes.join(" ");
   };
-
   /**
    * On click, ensure that the new selection is saved and that
    * there is atleast a 7 day difference between the start and end
@@ -147,38 +160,38 @@ export default () => {
   return (
     <div className="calendar">
       <div className="calendar-header">
-        <h2>
-          {calendarState.date.getMonth() === 0 &&
-          calendarState.date.getFullYear() === 2015 ? (
-            <i className="fas fa-angle-left"></i>
-          ) : (
-            <i
-              className="fas fa-angle-left"
-              style={{ color: "white" }}
-              onClick={() => onMonthChange(-1)}
-            ></i>
-          )}
-          {"  "}
-          {`${
-            DATE_MAP[calendarState.date.getMonth()]["long"]
-          } - ${calendarState.date.getFullYear()}`}
-          {"  "}
-          {calendarState.date.getMonth() === 11 &&
-          calendarState.date.getFullYear() === 2025 ? (
-            <i className="fas fa-angle-right"></i>
-          ) : (
-            <i
-              className="fas fa-angle-right"
-              style={{ color: "white" }}
-              onClick={() => onMonthChange(1)}
-            ></i>
-          )}
-        </h2>
+        {calendarState.date.getMonth() === 0 &&
+        calendarState.date.getFullYear() === 2015 ? (
+          <div>
+            <i className="fas fa-arrow-left"></i>
+          </div>
+        ) : (
+          <div onClick={() => onMonthChange(-1)}>
+            <i className="fas fa-arrow-left" style={{ color: "white" }}></i>
+          </div>
+        )}
+        <div>
+          <h2>
+            {`${
+              DATE_MAP[calendarState.date.getMonth()]["long"]
+            } - ${calendarState.date.getFullYear()}`}
+          </h2>
+        </div>
+        {calendarState.date.getMonth() === 11 &&
+        calendarState.date.getFullYear() === 2025 ? (
+          <div>
+            <i className="fas fa-arrow-right"></i>
+          </div>
+        ) : (
+          <div onClick={() => onMonthChange(1)}>
+            <i className="fas fa-arrow-right" style={{ color: "white" }}></i>
+          </div>
+        )}
       </div>
       <div className="calendar-body">
         {Object.values(DAYS_OF_WEEK).map((day: any) => {
           return (
-            <div className="calendar-day" key={day["short"]}>
+            <div className="calendar-cell" key={day["short"]}>
               {day["short"]}
             </div>
           );
@@ -188,9 +201,11 @@ export default () => {
             <div
               key={i}
               onClick={() => onDayClick(i)}
-              className={getCalendarClass(i)}
+              className={getCalendarClass(i, "calendar-cell")}
             >
-              {day[i].getDate()}
+              <div className={getCalendarClass(i, "calendar-day")}>
+                {day[i].getDate()}
+              </div>
             </div>
           );
         })}
