@@ -20,10 +20,10 @@ const statsRouter = express.Router();
 
 /**
  * Grabs tournament stats from ballchasing.com
- * GET/:eventId
+ * GET/bc/:eventId
  */
 statsRouter.get(
-  "/:eventId",
+  "/bc/:eventId",
   [
     auth,
     roles(["Player", "Manager", "Coach", "Admin"]),
@@ -69,85 +69,109 @@ statsRouter.get(
         });
       }
 
+      // Convert to RFC 3339 Format
       const startTime = event.time.toISOString().replace("+", "%2B");
 
-      const result = await axios.get(
+      // Grabs all matches between start and end time in ballchasing with other parameters
+      const tournamentResult = await axios.get(
         `https://ballchasing.com/api/replays?uploader=${event.uploader.steam64Id}&playlist=private&replay-date-after=${startTime}&replay-date-before=${endTime}&sort-by=replay-date`,
         config
       );
 
       let numWins: number = 0;
-      let tournamentMatches: {}[] = [];
-      result.data.list.forEach((tournament: any) => {
+      let initTournamentMatches: {}[] = [];
+
+      // Create initial object for each match, and calculate team wins
+      tournamentResult.data.list.forEach((match: any) => {
         if (
-          tournament.blue.players.filter(
+          match.blue.players.filter(
             (user: any) => user.id.id === event.uploader.steam64Id
           ).length > 0
         ) {
-          tournamentMatches.push({
+          initTournamentMatches.push({
             blue: {
+              id: match.id,
               name: "Florida Poly",
-              goals: !!tournament.blue.goals ? tournament.blue.goals : 0,
+              goals: !!match.blue.goals ? match.blue.goals : 0,
             },
             orange: {
               name: "Opponent",
-              goals: !!tournament.orange.goals ? tournament.orange.goals : 0,
+              goals: !!match.orange.goals ? match.orange.goals : 0,
             },
           });
           if (
-            (!!tournament.orange.goals ? tournament.orange.goals : 0) >
-            (!!tournament.blue.goals ? tournament.blue.goals : 0)
+            (!!match.orange.goals ? match.orange.goals : 0) >
+            (!!match.blue.goals ? match.blue.goals : 0)
           ) {
             numWins++;
           }
         } else {
-          tournamentMatches.push({
-            id: tournament.id,
+          initTournamentMatches.push({
+            id: match.id,
             blue: {
               name: "Opponent",
-              goals: !!tournament.blue.goals ? tournament.blue.goals : 0,
+              goals: !!match.blue.goals ? match.blue.goals : 0,
             },
             orange: {
               name: "Florida Poly",
-              goals: !!tournament.orange.goals ? tournament.orange.goals : 0,
+              goals: !!match.orange.goals ? match.orange.goals : 0,
             },
           });
 
           if (
-            (!!tournament.orange.goals ? tournament.orange.goals : 0) >
-            (!!tournament.blue.goals ? tournament.blue.goals : 0)
+            (!!match.orange.goals ? match.orange.goals : 0) >
+            (!!match.blue.goals ? match.blue.goals : 0)
           ) {
             numWins++;
           }
         }
       });
 
-      tournamentMatches.forEach(async (tournament: any) => {
-        console.log(tournament);
-        const matchResult = await axios.get(
-          `https://ballchasing.com/api/replays/${tournament.id}`,
-          config
-        );
+      // Make get request to get advanced stats for each match
+      await Promise.all(
+        initTournamentMatches.map(async (match: any) => {
+          try {
+            const matchResult = await axios.get(
+              `https://ballchasing.com/api/replays/${match.id}`,
+              config
+            );
 
-        // FIX: tournament = {...tournament, : matchResult.data.orange.players}
-        // tournament.orange.players = matchResult.data.orange.players;
-        // tournament.orange.stats = matchResult.data.orange.stats;
-        // tournament.blue.players = matchResult.data.blue.players;
-        // tournament.blue.stats = matchResult.data.blue.stats;
+            // Gives opponent team name if it exists
+            match.orange.name === "Florida Poly" &&
+              !!matchResult.data.blue.name &&
+              (match.blue.name = matchResult.data.blue.name);
+            match.blue.name === "Florida Poly" &&
+              !!matchResult.data.orange.name &&
+              (match.orange.name = matchResult.data.orange.name);
 
-        console.log(tournament);
-        setTimeout(() => 500);
-      });
+            // Attach advanced stats to match
+            match.orange.players = matchResult.data.orange.players;
+            match.orange.stats = matchResult.data.orange.stats;
+            match.blue.players = matchResult.data.blue.players;
+            match.blue.stats = matchResult.data.blue.stats;
 
+            setTimeout(() => 500); // Timeout so we don't abuse endpoint
+          } catch (err) {
+            console.error(err);
+            res.status(500).json({
+              error: {
+                msg: `Server error while trying to grab stats for event with id ${req.params.eventId}`,
+              },
+            });
+          }
+        })
+      );
+
+      // Format gathered stats data into object
       const newTournament = {
         name: event.name,
-        numberOfMatches: result.data.count,
+        numberOfMatches: tournamentResult.data.count,
         numberOfWins: numWins,
-        numberOfLosses: Math.abs(result.data.count - numWins),
-        matches: tournamentMatches,
+        numberOfLosses: Math.abs(tournamentResult.data.count - numWins),
+        matches: initTournamentMatches,
       };
 
-      res.json(newTournament);
+      res.status(200).json(newTournament);
     } catch (err) {
       console.error(err);
       res.status(500).json({
