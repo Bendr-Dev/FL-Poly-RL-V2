@@ -1,5 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
+import { DateContext } from "./Dashboard";
 
 export default () => {
-  return <div className="weekly-events"></div>;
+  const [dateState, setDateState] = useContext(DateContext);
+  return (
+    <div className="weekly-events">
+      <span>
+        {dateState.startDate?.toLocaleDateString()} -{" "}
+        {dateState.endDate?.toLocaleDateString()}
+      </span>
+    </div>
+  );
 };

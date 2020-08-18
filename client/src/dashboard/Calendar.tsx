@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DATE_MAP, DAYS_OF_WEEK } from "../utils/date";
+import { DateContext } from "./Dashboard";
 
 interface ICalendarState {
   calendar: { [key: number]: Date }[];
@@ -9,8 +10,8 @@ interface ICalendarState {
 }
 
 export default () => {
+  const [dateState, setDateState] = useContext(DateContext);
   const initializeCalendar = (date: Date): { [key: number]: Date }[] => {
-    console.log(date);
     // Takes the index of the day
     let startOfMonth = new Date(date.getFullYear(), date.getMonth()).getDay();
     // Hack to get days in current month
@@ -102,7 +103,7 @@ export default () => {
     if (day < startOfMonth || day > startOfMonth + daysInMonth - 1) {
       classes.push("not-in-month");
     }
-    console.log(classes);
+
     return classes.join(" ");
   };
   /**
@@ -114,10 +115,7 @@ export default () => {
     let start = calendarState.start;
     let end = calendarState.end;
 
-    console.log(day <= start, day + 6 <= 42);
-    console.log(day);
-
-    if (day <= start && day + 6 < 42) {
+    if (day <= end && day + 6 < 42) {
       start = day;
       end = start + 6;
     } else if (day >= end && day - 6 >= 0) {
@@ -127,6 +125,12 @@ export default () => {
       start = 999;
       end = 999;
     }
+
+    console.log(calendarState.calendar[start]);
+    setDateState({
+      startDate: calendarState.calendar[start][start],
+      endDate: calendarState.calendar[end][end],
+    });
 
     setCalendarState({
       ...calendarState,
