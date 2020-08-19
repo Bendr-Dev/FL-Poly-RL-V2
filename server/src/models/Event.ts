@@ -2,7 +2,7 @@ import { IEvent } from "../../../common/interfaces/Event.Interface";
 import mongoose, { Schema, Document } from "mongoose";
 import * as dotenv from "dotenv";
 
-interface IEventDocument extends Document, IEvent {}
+export interface IEventDocument extends Document, IEvent {}
 
 // Work-around for HMR OverrideModelError
 dotenv.config();
