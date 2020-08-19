@@ -309,10 +309,7 @@ const processStatMetaData = async (
     method: "GET",
     url: `https://ballchasing.com/api/replays/${matchMetadata.replayId}`,
     timeout: 2000,
-    headers: {
-      Authorization: process.env.BC_API_KEY,
-      "Content-Type": "application/json",
-    },
+    ...config,
   });
 
   // Update match data
