@@ -14,7 +14,7 @@ if (isDev) {
 }
 
 const MatchSchema: Schema = new Schema({
-  tournamentId: { type: String, required: true },
+  tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: "Tournament" },
   replayId: { type: String, required: true },
   blue: { type: {}, required: true },
   orange: { type: {}, required: true },

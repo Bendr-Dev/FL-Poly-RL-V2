@@ -14,7 +14,7 @@ if (isDev) {
 }
 
 const StatSchema: Schema = new Schema({
-  matchId: { type: String, required: true },
+  matchId: { type: mongoose.Schema.Types.ObjectId, ref: "Match" },
   blue: { type: {}, required: true },
   orange: { type: {}, required: true },
 });
