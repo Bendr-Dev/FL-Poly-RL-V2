@@ -11,6 +11,7 @@ import userRouter from "./resources/user";
 import adminUserRouter from "./admin/resources/user";
 import eventRouter from "./resources/event";
 import statsRouter from "./resources/stats";
+import tournamentRouter from "./resources/tournament";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/api/users", userRouter);
 app.use("/admin/users", adminUserRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/stats", statsRouter);
+app.use("/api/tournaments", tournamentRouter);
 
 /** Server Activation */
 

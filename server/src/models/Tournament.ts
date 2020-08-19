@@ -14,7 +14,7 @@ if (isDev) {
 }
 
 const TournamentSchema: Schema = new Schema({
-  eventId: { type: String, required: true },
+  eventId: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
   name: { type: String, required: true },
   numberOfMatches: { type: Number, required: true },
   numberOfWins: { type: Number, required: true },
