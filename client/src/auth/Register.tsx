@@ -27,7 +27,7 @@ export default () => {
     password2,
   } = formData;
 
-  const { register, handleSubmit, watch, errors } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     mode: "onBlur",
   });
 
@@ -99,10 +99,16 @@ export default () => {
                 onChange={(e) => onChange(e)}
                 ref={register({
                   required: "Email is required",
+                  pattern: /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$/,
                 })}
               />
               <div>
-                {!!errors.email && <small>* {errors.email?.message}</small>}
+                {(errors.email?.type === "pattern" && (
+                  <small>* Email must be valid</small>
+                )) ||
+                  (errors.email?.type === "required" && (
+                    <small>* {errors.email?.message}</small>
+                  ))}
               </div>
             </div>
 
