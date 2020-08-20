@@ -84,7 +84,9 @@ export default () => {
                   required: "Name is required",
                 })}
               />
-              {!!errors.name && <small>* {errors.name?.message}</small>}
+              <div>
+                {!!errors.name && <small>* {errors.name?.message}</small>}
+              </div>
             </div>
 
             <div className="form-group">
@@ -99,7 +101,9 @@ export default () => {
                   required: "Email is required",
                 })}
               />
-              {!!errors.email && <small>* {errors.email?.message}</small>}
+              <div>
+                {!!errors.email && <small>* {errors.email?.message}</small>}
+              </div>
             </div>
 
             <div className="form-group">
@@ -114,7 +118,11 @@ export default () => {
                   required: "Username is required",
                 })}
               />
-              {!!errors.username && <small>* {errors.username?.message}</small>}
+              <div>
+                {!!errors.username && (
+                  <small>* {errors.username?.message}</small>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
@@ -148,9 +156,11 @@ export default () => {
                   required: "Steam64ID is required",
                 })}
               />
-              {!!errors.steam64Id && (
-                <small>* {errors.steam64Id?.message}</small>
-              )}
+              <div>
+                {!!errors.steam64Id && (
+                  <small>* {errors.steam64Id?.message}</small>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
@@ -165,12 +175,14 @@ export default () => {
                   required: "Password is required",
                 })}
               />
-              {(errors.password?.type === "validate" && (
-                <small>* Passwords must match</small>
-              )) ||
-                (errors.password?.type === "required" && (
-                  <small>* {errors.password?.message}</small>
-                ))}
+              <div>
+                {(errors.password?.type === "validate" && (
+                  <small>* Passwords must match</small>
+                )) ||
+                  (errors.password?.type === "required" && (
+                    <small>* {errors.password?.message}</small>
+                  ))}
+              </div>
             </div>
 
             <div className="form-group">
@@ -188,14 +200,14 @@ export default () => {
                   },
                 })}
               />
-              {(errors.password2?.type === "validate" ? (
-                <small>* Passwords must match</small>
-              ) : (
-                <small></small>
-              )) ||
-                (errors.password2?.type === "required" && (
-                  <small>* {errors.password2?.message}</small>
-                ))}
+              <div>
+                {(errors.password2?.type === "validate" && (
+                  <small>* Passwords must match</small>
+                )) ||
+                  (errors.password2?.type === "required" && (
+                    <small>* {errors.password2?.message}</small>
+                  ))}
+              </div>
             </div>
 
             <div className="register-actions">

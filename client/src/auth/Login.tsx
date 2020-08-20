@@ -69,7 +69,9 @@ export default () => {
                 required: "Email is required",
               })}
             />
-            {!!errors.email && <small>* {errors.email?.message}</small>}
+            <div>
+              {!!errors.email && <small>* {errors.email?.message}</small>}
+            </div>
           </div>
 
           <div className="form-group">
@@ -84,7 +86,9 @@ export default () => {
                 required: "Password is required",
               })}
             />
-            {!!errors.password && <small>* {errors.password?.message}</small>}
+            <div>
+              {!!errors.password && <small>* {errors.password?.message}</small>}
+            </div>
           </div>
 
           <div className="login-actions">
