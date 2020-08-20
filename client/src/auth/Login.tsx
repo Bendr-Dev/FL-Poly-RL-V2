@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../App";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { postData } from "../utils/http";
 
 export default () => {
@@ -14,7 +14,6 @@ export default () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    e.persist();
     try {
       setAuthState({
         loading: true,
@@ -49,11 +48,11 @@ export default () => {
   return (
     <div className="container">
       <div className="login-form">
-        <form autoComplete="off" onSubmit={onSubmit}>
-          <input type="hidden" value="prayer" />
+        <form onSubmit={onSubmit}>
           <div className="form-header">
             <h1>Login</h1>
           </div>
+          <div className="line-break-primary"></div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -61,7 +60,6 @@ export default () => {
               placeholder="Email Address"
               name="email"
               value={email}
-              autoComplete="new-email"
               onChange={(e) => onChange(e)}
             />
           </div>
@@ -73,12 +71,17 @@ export default () => {
               placeholder="Password"
               name="password"
               value={password}
-              autoComplete="new-password"
               onChange={(e) => onChange(e)}
             />
           </div>
 
-          <input className="btn" type="submit" value="LOGIN" />
+          <div className="login-actions">
+            <input className="btn" type="submit" value="LOGIN" />
+            <span>
+              Don't have an account already?{" "}
+              <Link to="/register">Register Here</Link>
+            </span>
+          </div>
         </form>
       </div>
     </div>

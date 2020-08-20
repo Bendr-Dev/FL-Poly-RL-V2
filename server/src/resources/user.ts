@@ -100,7 +100,7 @@ userRouter.post(
         .status(201)
         .cookie("x-refresh-token", refreshToken, { httpOnly: true })
         .cookie("x-auth-token", accessToken, { httpOnly: true })
-        .json({ login: true });
+        .json({ login: true, user: newUser });
     } catch (err) {
       console.error(err);
       res

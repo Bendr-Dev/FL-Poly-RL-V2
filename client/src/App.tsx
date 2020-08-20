@@ -31,7 +31,7 @@ export default () => {
             <Switch>
               <ProtectedRoute
                 exact
-                path="/dashboard"
+                path={["/dashboard", "/"]}
                 component={Dashboard}
                 isLoggedIn={authState.isLoggedIn}
                 loading={authState.loading}
