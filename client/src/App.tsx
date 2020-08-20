@@ -6,6 +6,7 @@ import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./auth/Login";
+import Register from "./auth/Register";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -18,6 +19,7 @@ export default () => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     user: {},
+    loading: false,
   });
   return (
     <AuthContext.Provider value={[authState, setAuthState]}>
@@ -32,8 +34,10 @@ export default () => {
                 path="/dashboard"
                 component={Dashboard}
                 isLoggedIn={authState.isLoggedIn}
+                loading={authState.loading}
               />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
             </Switch>
           </div>
         </div>

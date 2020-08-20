@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../App";
 import { Redirect } from "react-router-dom";
 import { postData } from "../utils/http";
@@ -16,13 +16,18 @@ export default () => {
     e.preventDefault();
     e.persist();
     try {
+      setAuthState({
+        loading: true,
+      });
+
       const response = await postData("/api/users/login", formData);
 
-      setAuthState({
-        isLoggedIn: response.login,
-        user: response.user,
-      });
-      console.log(authState);
+      response &&
+        setAuthState({
+          isLoggedIn: response.login,
+          user: response.user,
+          loading: false,
+        });
     } catch (err) {
       console.error(err);
       if (err.status === 401) {
@@ -42,31 +47,40 @@ export default () => {
   }
 
   return (
-    <div className="login-form">
-      <form onSubmit={onSubmit}>
-        <h1>Login</h1>
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            name="email"
-            value={email}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
+    <div className="container">
+      <div className="login-form">
+        <form autoComplete="off" onSubmit={onSubmit}>
+          <input type="hidden" value="prayer" />
+          <div className="form-header">
+            <h1>Login</h1>
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={email}
+              autoComplete="new-email"
+              onChange={(e) => onChange(e)}
+            />
+          </div>
 
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              autoComplete="new-password"
+              onChange={(e) => onChange(e)}
+            />
+          </div>
 
-        <input type="submit" value="login" />
-      </form>
+          <input className="btn" type="submit" value="LOGIN" />
+        </form>
+      </div>
     </div>
   );
 };

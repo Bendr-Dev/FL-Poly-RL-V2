@@ -4,11 +4,13 @@ import { Route, Redirect, RouteProps } from "react-router-dom";
 interface IPropTypes extends RouteProps {
   isLoggedIn: boolean;
   component: FunctionComponent<any>;
+  loading: boolean;
 }
 
 const ProtectedRoute = ({
   component: Component,
   isLoggedIn,
+  loading,
   ...rest
 }: IPropTypes) => {
   return (
