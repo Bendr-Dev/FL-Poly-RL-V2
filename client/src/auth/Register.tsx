@@ -32,7 +32,6 @@ export default () => {
   });
 
   const onSubmit = async (e: any) => {
-    e.preventDefault();
     try {
       setAuthState({
         loading: true,
@@ -82,9 +81,10 @@ export default () => {
                 value={name}
                 onChange={(e) => onChange(e)}
                 ref={register({
-                  required: "name is required",
+                  required: "Name is required",
                 })}
               />
+              {!!errors.name && <small>* {errors.name?.message}</small>}
             </div>
 
             <div className="form-group">
@@ -99,6 +99,7 @@ export default () => {
                   required: "Email is required",
                 })}
               />
+              {!!errors.email && <small>* {errors.email?.message}</small>}
             </div>
 
             <div className="form-group">
@@ -113,6 +114,7 @@ export default () => {
                   required: "Username is required",
                 })}
               />
+              {!!errors.username && <small>* {errors.username?.message}</small>}
             </div>
 
             <div className="form-group">
@@ -127,6 +129,9 @@ export default () => {
                   required: "Discord ID is required",
                 })}
               />
+              {!!errors.discordId && (
+                <small>* {errors.discordId?.message}</small>
+              )}
             </div>
           </div>
 
@@ -143,6 +148,9 @@ export default () => {
                   required: "Steam64ID is required",
                 })}
               />
+              {!!errors.steam64Id && (
+                <small>* {errors.steam64Id?.message}</small>
+              )}
             </div>
 
             <div className="form-group">
@@ -157,7 +165,12 @@ export default () => {
                   required: "Password is required",
                 })}
               />
-              {errors.password && "Passwords do not match"}
+              {(errors.password?.type === "validate" && (
+                <small>* Passwords must match</small>
+              )) ||
+                (errors.password?.type === "required" && (
+                  <small>* {errors.password?.message}</small>
+                ))}
             </div>
 
             <div className="form-group">
@@ -169,15 +182,16 @@ export default () => {
                 value={password2}
                 onChange={(e) => onChange(e)}
                 ref={register({
-                  required: "Second password is required",
+                  required: "Confirm password is required",
                   validate: (value: string) => {
-                    console.log(errors.password2);
                     return value === password;
                   },
                 })}
               />
-              {(errors.password2?.type === "validate" && (
+              {(errors.password2?.type === "validate" ? (
                 <small>* Passwords must match</small>
+              ) : (
+                <small></small>
               )) ||
                 (errors.password2?.type === "required" && (
                   <small>* {errors.password2?.message}</small>

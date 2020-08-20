@@ -94,6 +94,12 @@ form {
 .form-group {
   width: 100%;
   margin-bottom: 2rem;
+  height: 5rem;
+}
+
+.form-group small {
+  margin-top: 0.5rem;
+  color: #ff0000;
 }
 
 .form-group input {
@@ -127,6 +133,7 @@ form {
   grid-area: events;
   background-color: var(--card-gray);
   border-radius: 0.25rem;
+  box-shadow: 4px 4px 5px #0c0d0e;
 }
 
 .calendar {
@@ -135,18 +142,21 @@ form {
   display: flex;
   flex-direction: column;
   border-radius: 0.25rem;
+  box-shadow: 4px 4px 5px #0c0d0e;
 }
 
 .player-carousel {
   grid-area: carousel;
   background-color: var(--card-gray);
   border-radius: 0.25rem;
+  box-shadow: 4px 4px 5px #0c0d0e;
 }
 
 .recent-tournaments {
   grid-area: tournament;
   background-color: var(--card-gray);
   border-radius: 0.25rem;
+  box-shadow: 4px 4px 5px #0c0d0e;
 }
 
 /* Calendar */
@@ -259,8 +269,10 @@ form {
 }
 
 .register-form .form-column {
-  min-width: 25rem;
+  min-width: 28rem;
+  /* width: 25rem; */
   padding: 0 1.5rem;
+  height: 100%;
 }
 
 .register-form .line-break-primary {

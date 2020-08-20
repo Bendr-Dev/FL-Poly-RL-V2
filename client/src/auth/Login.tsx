@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../App";
 import { Redirect, Link } from "react-router-dom";
 import { postData } from "../utils/http";
+import { useForm } from "react-hook-form";
 
 export default () => {
   const [authState, setAuthState] = useContext(AuthContext);
@@ -12,8 +13,11 @@ export default () => {
 
   const { email, password } = formData;
 
+  const { register, handleSubmit, watch, errors } = useForm({
+    mode: "onBlur",
+  });
+
   const onSubmit = async (e: any) => {
-    e.preventDefault();
     try {
       setAuthState({
         loading: true,
@@ -48,7 +52,7 @@ export default () => {
   return (
     <div className="container">
       <div className="login-form">
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-header">
             <h1>Login</h1>
           </div>
@@ -61,7 +65,11 @@ export default () => {
               name="email"
               value={email}
               onChange={(e) => onChange(e)}
+              ref={register({
+                required: "Email is required",
+              })}
             />
+            {!!errors.email && <small>* {errors.email?.message}</small>}
           </div>
 
           <div className="form-group">
@@ -72,7 +80,11 @@ export default () => {
               name="password"
               value={password}
               onChange={(e) => onChange(e)}
+              ref={register({
+                required: "Password is required",
+              })}
             />
+            {!!errors.password && <small>* {errors.password?.message}</small>}
           </div>
 
           <div className="login-actions">
