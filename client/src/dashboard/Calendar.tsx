@@ -191,6 +191,7 @@ export default () => {
           </div>
         )}
       </div>
+      <div className="line-break-primary"></div>
       <div className="calendar-body">
         {Object.values(DAYS_OF_WEEK).map((day: any) => {
           return (

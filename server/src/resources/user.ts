@@ -100,7 +100,7 @@ userRouter.post(
         .status(201)
         .cookie("x-refresh-token", refreshToken, { httpOnly: true })
         .cookie("x-auth-token", accessToken, { httpOnly: true })
-        .json({ login: true });
+        .json({ login: true, user: newUser });
     } catch (err) {
       console.error(err);
       res
@@ -135,14 +135,14 @@ userRouter.post(
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ error: { msg: "Invalid Credentials" } });
+        return res.status(401).json({ error: { msg: "Invalid Credentials" } });
       }
 
       // Check password
       const isMatch = await bcrypt.compare(password, user.password as string);
 
       if (!isMatch) {
-        return res.status(400).json({ error: { msg: "Invalid Credentials" } });
+        return res.status(401).json({ error: { msg: "Invalid Credentials" } });
       }
 
       // Return webtoken
@@ -163,7 +163,7 @@ userRouter.post(
         .status(200)
         .cookie("x-refresh-token", refreshToken, { httpOnly: true })
         .cookie("x-auth-token", accessToken, { httpOnly: true })
-        .json({ login: true });
+        .json({ login: true, user });
     } catch (err) {
       console.error(err);
       res
