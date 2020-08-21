@@ -152,11 +152,54 @@ form {
   box-shadow: 4px 4px 5px #0c0d0e;
 }
 
+/* Recent tournaments */
 .recent-tournaments {
   grid-area: tournament;
+  display: flex;
+  flex-direction: column;
   background-color: var(--card-gray);
   border-radius: 0.25rem;
   box-shadow: 4px 4px 5px #0c0d0e;
+}
+
+.tournament-header {
+  color: #ddd;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  margin: 0 1rem;
+}
+
+.tournament-header span {
+  align-self: center;
+  margin-right: 3rem;
+}
+
+.tournament-body {
+  padding-top: 1.5rem;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tournament-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1rem 0;
+  margin: 0 1rem;
+}
+
+.tournament-name {
+  color: #fff;
+}
+
+.tournament-record {
+  color: #fff;
+  margin-right: 3rem;
 }
 
 /* Calendar */
