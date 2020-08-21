@@ -126,7 +126,6 @@ export default () => {
       end = 999;
     }
 
-    console.log(calendarState.calendar[start]);
     setDateState({
       startDate: calendarState.calendar[start][start],
       endDate: calendarState.calendar[end][end],

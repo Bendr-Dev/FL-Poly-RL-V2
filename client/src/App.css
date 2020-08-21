@@ -128,11 +128,48 @@ form {
 }
 
 /** Dashboard Items **/
+
+/* Weekly events */
 .weekly-events {
   grid-area: events;
   background-color: var(--card-gray);
   border-radius: 0.25rem;
   box-shadow: 4px 4px 5px #0c0d0e;
+  display: flex;
+  flex-direction: column;
+}
+
+.weekly-header {
+  color: #ddd;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  margin: 1rem;
+  align-items: center;
+  text-align: center;
+}
+
+.weekly-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weekly-day {
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  padding-top: 1.5rem;
+}
+
+.weekly-day .day-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #424242;
+}
+
+.weekly-event {
+  padding: 1rem;
 }
 
 .calendar {
