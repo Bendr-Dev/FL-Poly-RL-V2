@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
-import Event, { IEventDocument } from "../models/Event";
+import Event from "../models/Event";
 import roles from "../utils/middleware/roles";
 import auth from "../utils/middleware/auth";
 
@@ -267,8 +267,6 @@ eventRouter.get(
       // Convert string to date
       const startDate = new Date(new Date(startTime));
       const endDate = new Date(new Date(endTime).setHours(23, 59, 59));
-
-      console.log(startDate, endDate);
 
       const events = await Event.find({
         time: {
