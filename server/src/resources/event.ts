@@ -301,7 +301,7 @@ eventRouter.get(
 
       res.status(200).json(weekRange);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       res
         .status(500)
         .json({ error: { msg: "Server error trying to get weekly events" } });
