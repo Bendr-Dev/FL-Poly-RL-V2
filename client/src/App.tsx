@@ -1,12 +1,18 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  Switch,
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import { getData } from "./utils/http";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -21,6 +27,45 @@ export default () => {
     user: {},
     loading: false,
   });
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        setAuthState({
+          ...authState,
+          loading: true,
+        });
+
+        const response = await getData("/api/users/me");
+
+        !!response &&
+          setAuthState({
+            isLoggedIn: true,
+            user: response.user,
+            loading: false,
+          });
+      } catch (err) {
+        if (err.status === 401) {
+          setAuthState({
+            isLoggedIn: false,
+            user: {},
+            loading: false,
+          });
+        }
+      }
+    };
+    checkAuth();
+    authState.loading && redirectTo();
+  }, []);
+
+  const redirectTo = () => {
+    if (authState.isLoggedIn) {
+      return <Redirect to="/dashboard" />;
+    } else {
+      return <Redirect to="/login" />;
+    }
+  };
+
   return (
     <AuthContext.Provider value={[authState, setAuthState]}>
       <Router>
