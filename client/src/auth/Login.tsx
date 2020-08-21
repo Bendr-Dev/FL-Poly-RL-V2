@@ -34,7 +34,6 @@ export default () => {
           });
         }
       } else {
-        console.log(response);
         response &&
           setAuthState({
             isLoggedIn: response.login,
