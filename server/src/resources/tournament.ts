@@ -16,8 +16,6 @@ tournamentRouter.get(
     // Deconstruct request
     const amount = parseInt(req.params.amount, 10);
 
-    console.log(amount);
-
     // Check validity of amount
     if (amount < 1 || isNaN(amount)) {
       return res.status(400).json({

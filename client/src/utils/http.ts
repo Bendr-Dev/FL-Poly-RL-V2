@@ -1,5 +1,6 @@
 export const postData = async (url: string, data: any) => {
   let payload: any = {};
+  let error = {};
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -12,17 +13,18 @@ export const postData = async (url: string, data: any) => {
     payload = await response.json();
 
     if (!!payload["error"] || response.status >= 400) {
-      throw { ...payload["error"], status: response.status };
+      error = { ...payload["error"], status: response.status };
     }
 
-    return payload;
+    return [error, payload];
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
 export const getData = async (url: string) => {
   let payload: any = {};
+  let error: any = null;
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -34,11 +36,11 @@ export const getData = async (url: string) => {
     payload = await response.json();
 
     if (!!payload["error"] || response.status >= 400) {
-      throw { ...payload["error"], status: response.status };
+      error = { ...payload["error"], status: response.status };
     }
 
-    return payload;
+    return [error, payload];
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
