@@ -6,7 +6,13 @@ export default () => {
 
   useEffect(() => {
     const data = async () => {
-      const tournaments: any[] = await getData("/api/tournaments/recent/5");
+      const [error, tournaments]: any[] = await getData(
+        "/api/tournaments/recent/5"
+      );
+
+      if (error) {
+        console.error(error);
+      }
 
       !!tournaments && setTournaments(tournaments);
     };
@@ -16,7 +22,7 @@ export default () => {
   return (
     <div className="recent-tournaments">
       <div className="tournament-header">
-        <h3>Recent Tournaments</h3>
+        <h3>Recent Results</h3>
         <span>W - L</span>
       </div>
       <div className="line-break-primary"></div>
