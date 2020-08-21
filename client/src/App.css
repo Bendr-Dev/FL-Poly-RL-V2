@@ -56,14 +56,13 @@ nav.side-nav {
   color: #fff;
   align-items: center;
   justify-content: flex-start;
-  align-self: flex-start;
-  width: 12.5rem;
-  min-height: 100%;
+  width: 15rem;
+  min-height: 100vh;
 }
 
 div.content-area {
   display: flex;
-  height: calc(100vh - var(--main-nav-height));
+  height: calc(100% - var(--main-nav-height));
 }
 
 .container {

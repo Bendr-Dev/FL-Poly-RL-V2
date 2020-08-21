@@ -6,7 +6,13 @@ export default () => {
 
   useEffect(() => {
     const data = async () => {
-      const tournaments: any[] = await getData("/api/tournaments/recent/5");
+      const [error, tournaments]: any[] = await getData(
+        "/api/tournaments/recent/5"
+      );
+
+      if (error) {
+        console.error(error);
+      }
 
       !!tournaments && setTournaments(tournaments);
     };

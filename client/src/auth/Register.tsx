@@ -37,22 +37,24 @@ export default () => {
         loading: true,
       });
 
-      const response = await postData("/api/users/register", formData);
+      const [error, response] = await postData("/api/users/register", formData);
 
-      response &&
-        setAuthState({
-          isLoggedIn: response.login,
-          user: response.user,
-          loading: false,
-        });
-    } catch (err) {
-      console.error(err);
-      if (err.status === 401) {
+      if (!!error) {
         setAuthState({
           isLoggedIn: false,
           user: {},
+          loading: false,
         });
+      } else {
+        response &&
+          setAuthState({
+            isLoggedIn: response.login,
+            user: response.user,
+            loading: false,
+          });
       }
+    } catch (err) {
+      console.error(err);
     }
   };
 
