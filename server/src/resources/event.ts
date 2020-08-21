@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
-import Event from "../models/Event";
+import Event, { IEventDocument } from "../models/Event";
 import roles from "../utils/middleware/roles";
 import auth from "../utils/middleware/auth";
 
@@ -240,6 +240,73 @@ eventRouter.delete(
           msg: `Server error trying to delete event with id ${req.params.eventId}`,
         },
       });
+    }
+  }
+);
+
+/**
+ * Gets all events from start time to end time
+ * GET/ weekly/:startTime-:endTime
+ */
+eventRouter.get(
+  "/weekly/:startTime&:endTime",
+  auth,
+  async (req: Request, res: Response) => {
+    try {
+      const startTime = req.params.startTime;
+      const endTime = req.params.endTime;
+
+      if (startTime === "" && endTime === "") {
+        res.status(401).json({
+          error: {
+            msg: "Bad request: startTime and endTime cannot be empty",
+          },
+        });
+      }
+
+      // Convert string to date
+      const startDate = new Date(new Date(startTime));
+      const endDate = new Date(new Date(endTime).setHours(23, 59, 59));
+
+      console.log(startDate, endDate);
+
+      const events = await Event.find({
+        time: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      }).sort({ time: 1 });
+
+      // Grabs days between start and end date
+      const getWeekRange = (start: Date, end: Date) => {
+        let dateArray = [];
+        for (
+          let startDt: Date = new Date(start);
+          startDt <= end;
+          startDt.setDate(startDt.getDate() + 1)
+        ) {
+          dateArray.push({ [startDt.toISOString().slice(0, 10)]: [] });
+        }
+        return dateArray;
+      };
+
+      const weekRange = getWeekRange(startDate, endDate);
+
+      // Takes sorted events and pushes them into their respective day
+      events.forEach((event: any) => {
+        weekRange.forEach((day: any) => {
+          if (!!day[`${event.time.toISOString().slice(0, 10)}`]) {
+            return day[`${event.time.toISOString().slice(0, 10)}`].push(event);
+          }
+        });
+      });
+
+      res.status(200).json(weekRange);
+    } catch (err) {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: { msg: "Server error trying to get weekly events" } });
     }
   }
 );
