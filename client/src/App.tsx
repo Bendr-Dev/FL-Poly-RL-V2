@@ -9,6 +9,7 @@ import {
   BrowserRouter as Router,
   Route,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
@@ -28,6 +29,8 @@ export default () => {
     loading: false,
   });
 
+  const history = useHistory();
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -44,6 +47,8 @@ export default () => {
             user: response.user,
             loading: false,
           });
+
+        authState.loading && history.push("/dashboard");
       } catch (err) {
         if (err.status === 401) {
           setAuthState({
@@ -51,11 +56,12 @@ export default () => {
             user: {},
             loading: false,
           });
+          authState.loading && history.push("/login");
         }
       }
     };
     checkAuth();
-    authState.loading && redirectTo();
+    // authState.loading && redirectTo();
   }, []);
 
   const redirectTo = () => {

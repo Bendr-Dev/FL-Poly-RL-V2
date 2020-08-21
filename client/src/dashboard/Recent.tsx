@@ -16,7 +16,7 @@ export default () => {
   return (
     <div className="recent-tournaments">
       <div className="tournament-header">
-        <h3>Recent Tournaments</h3>
+        <h3>Recent Results</h3>
         <span>W - L</span>
       </div>
       <div className="line-break-primary"></div>
