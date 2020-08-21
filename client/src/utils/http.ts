@@ -20,3 +20,25 @@ export const postData = async (url: string, data: any) => {
     console.error(error);
   }
 };
+
+export const getData = async (url: string) => {
+  let payload: any = {};
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    payload = await response.json();
+
+    if (!!payload["error"] || response.status >= 400) {
+      throw { ...payload["error"], status: response.status };
+    }
+
+    return payload;
+  } catch (error) {
+    console.error(error);
+  }
+};
