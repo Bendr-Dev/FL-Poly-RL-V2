@@ -25,7 +25,8 @@ export default () => {
 
       const [error, response] = await postData("/api/users/login", formData);
 
-      if (!!error) {
+      if (error) {
+        console.log(error);
         if (error.status === 401) {
           setAuthState({
             isLoggedIn: false,
