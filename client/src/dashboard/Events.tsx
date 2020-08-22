@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DateContext } from "./Dashboard";
 import { getData } from "../utils/http";
+import { DAYS_OF_WEEK } from "../utils/date";
 
 export default () => {
   const [dateState, setDateState] = useContext(DateContext);
@@ -21,7 +22,6 @@ export default () => {
       }
 
       !!events && setEvents(events);
-      console.log(events);
     };
     data();
   }, [dateState]);
@@ -41,12 +41,16 @@ export default () => {
         {!!events &&
           events.map((eventDay: any) => {
             const date = Object.keys(eventDay)[0];
+            const day = new Date(date);
+            day.setHours(25);
             let items: any;
             !!Object.values(eventDay)[0] &&
               (items = Object.values(eventDay)[0]);
             return (
               <div key={date} className="weekly-day">
-                <div className="day-header">{date}</div>
+                <div className="day-header">
+                  {DAYS_OF_WEEK[day.getDay()]["long"]}
+                </div>
                 {!!Object.values(eventDay)[0] &&
                   items.map((item: any, index: number) => {
                     return (

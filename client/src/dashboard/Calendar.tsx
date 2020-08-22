@@ -18,12 +18,12 @@ export default () => {
     let daysInMonth =
       32 - new Date(date.getFullYear(), date.getMonth(), 32).getDate();
     let daysInLastMonth =
-      32 - new Date(date.getFullYear(), date.getMonth() + 1, 32).getDate();
+      32 - new Date(date.getFullYear(), date.getMonth() - 1, 32).getDate();
 
     const newCalendar = [];
 
     for (let i = 0; i < 7 * 6; i++) {
-      if (i < startOfMonth - 1) {
+      if (i < startOfMonth) {
         newCalendar.push({
           [i]: new Date(
             date.getFullYear(),
@@ -31,7 +31,7 @@ export default () => {
             daysInLastMonth - startOfMonth + (i + 1)
           ),
         });
-      } else if (i > startOfMonth + daysInMonth - 1) {
+      } else if (i > startOfMonth + daysInMonth) {
         newCalendar.push({
           [i]: new Date(
             date.getFullYear(),
