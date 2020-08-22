@@ -12,6 +12,7 @@ import adminUserRouter from "./admin/resources/user";
 import eventRouter from "./resources/event";
 import statsRouter from "./resources/stats";
 import tournamentRouter from "./resources/tournament";
+import statSummaryCron from "./cron/statsSummary";
 
 dotenv.config();
 
@@ -26,8 +27,11 @@ if (!process.env.PORT) {
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
 // Creates connection to Database
-initializeDB();
+(async () => {
+  await initializeDB();
 
+  await statSummaryCron();
+})();
 // Creates instance of an express application
 const app = express();
 
