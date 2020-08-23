@@ -1,64 +1,88 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { DATE_MAP, DAYS_OF_WEEK } from "../utils/date";
 import { DateContext } from "./Dashboard";
+import { start } from "repl";
 
 interface ICalendarState {
-  calendar: { [key: number]: Date }[];
-  date: Date;
-  start: number;
-  end: number;
+  calendar: Date[];
+  monthOffset: number;
 }
+
+const dateComparison = (
+  first: Date | undefined,
+  second: Date | undefined
+): boolean => {
+  return (
+    (first &&
+      second &&
+      first.toLocaleDateString() === second.toLocaleDateString()) ||
+    false
+  );
+};
 
 export default () => {
   const [dateState, setDateState] = useContext(DateContext);
-  const initializeCalendar = (date: Date): { [key: number]: Date }[] => {
+  const [calendarState, setCalendarState] = useState<ICalendarState>({
+    calendar: [],
+    monthOffset: 0,
+  });
+
+  const initializeCalendar = (): void => {
     // Takes the index of the day
-    let startOfMonth = new Date(date.getFullYear(), date.getMonth()).getDay();
-    // Hack to get days in current month
-    let daysInMonth =
-      32 - new Date(date.getFullYear(), date.getMonth(), 32).getDate();
-    let daysInLastMonth =
-      32 - new Date(date.getFullYear(), date.getMonth() - 1, 32).getDate();
 
-    const newCalendar = [];
+    let tempDate = new Date();
+    let date = new Date(
+      tempDate.getFullYear(),
+      tempDate.getMonth() + calendarState.monthOffset
+    );
 
-    for (let i = 0; i < 7 * 6; i++) {
-      if (i < startOfMonth) {
-        newCalendar.push({
-          [i]: new Date(
-            date.getFullYear(),
-            date.getMonth() - 1,
-            daysInLastMonth - startOfMonth + (i + 1)
-          ),
-        });
-      } else if (i > startOfMonth + daysInMonth) {
-        newCalendar.push({
-          [i]: new Date(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            (i % daysInMonth) - startOfMonth + 1
-          ),
-        });
-      } else {
-        newCalendar.push({
-          [i]: new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            i - startOfMonth + 1
-          ),
-        });
-      }
+    if (dateState.init && dateState.startDate) {
+      date = new Date(
+        dateState.startDate.getFullYear(),
+        dateState.startDate.getMonth() + calendarState.monthOffset
+      );
     }
 
-    return newCalendar;
+    let startOfMonth = new Date(date.getFullYear(), date.getMonth()).getDay();
+
+    console.log(startOfMonth);
+    console.log(
+      new Date(date.getFullYear(), date.getMonth() + calendarState.monthOffset)
+    );
+
+    const newCalendar: Date[] = [];
+
+    for (let i = 0; i < 7 * 6; i++) {
+      newCalendar.push(
+        new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() - startOfMonth + i
+        )
+      );
+    }
+
+    setCalendarState((previousState) => {
+      return {
+        ...previousState,
+        calendar: newCalendar,
+      };
+    });
   };
 
-  const [calendarState, setCalendarState] = useState({
-    date: new Date(),
-    start: 999,
-    end: 999,
-    calendar: initializeCalendar(new Date()),
-  });
+  const initalize = useCallback(initializeCalendar, [
+    calendarState.monthOffset,
+  ]);
+  const getDate = useCallback(() => {
+    const tempDate = new Date();
+    const date = new Date(
+      tempDate.getFullYear(),
+      tempDate.getMonth() + calendarState.monthOffset
+    );
+
+    return `${DATE_MAP[date.getMonth()]["long"]} - ${date.getFullYear()}`;
+  }, [calendarState.monthOffset]);
+  useEffect(initalize, [calendarState.monthOffset]);
 
   /**
    * Get the class of the given day's div based on start
@@ -66,41 +90,44 @@ export default () => {
    * @param day - the given day to be checked
    */
   const getCalendarClass = (
-    day: number,
+    day: Date,
     type: "calendar-day" | "calendar-cell"
   ) => {
     const classes: string[] = [type];
-    if (day === calendarState.start || day === calendarState.end) {
+    if (
+      dateComparison(day, dateState.startDate) ||
+      dateComparison(day, dateState.endDate)
+    ) {
       if (type === "calendar-cell") {
         classes.push("week");
-        if (day === calendarState.start) {
+        if (dateComparison(day, dateState.startDate)) {
           classes.push("week-start");
         }
-        if (day === calendarState.end) {
+        if (dateComparison(day, dateState.endDate)) {
           classes.push("week-end");
         }
         return classes.join(" ");
       }
       classes.push("active");
-    } else if (day > calendarState.start && day < calendarState.end) {
+    } else if (
+      dateState.startDate &&
+      day > dateState.startDate &&
+      dateState.endDate &&
+      day < dateState.endDate
+    ) {
       classes.push("week");
     }
 
-    let startOfMonth = new Date(
-      calendarState.date.getFullYear(),
-      calendarState.date.getMonth()
-    ).getDay();
+    const tempDate = new Date();
+    const date = new Date(
+      tempDate.getFullYear(),
+      tempDate.getMonth() + calendarState.monthOffset
+    );
 
-    // Hack to get days in current month
-    let daysInMonth =
-      32 -
-      new Date(
-        calendarState.date.getFullYear(),
-        calendarState.date.getMonth(),
-        32
-      ).getDate();
-
-    if (day < startOfMonth || day > startOfMonth + daysInMonth - 1) {
+    if (
+      day.getFullYear() === date.getFullYear() &&
+      day.getMonth() !== date.getMonth()
+    ) {
       classes.push("not-in-month");
     }
 
@@ -111,59 +138,58 @@ export default () => {
    * there is atleast a 7 day difference between the start and end
    * @param day - the day of the given month
    */
-  const onDayClick = (day: number) => {
-    let start = calendarState.start;
-    let end = calendarState.end;
+  const onDayClick = (day: Date, index: number) => {
+    let startDate: Date | undefined = undefined;
+    let endDate: Date | undefined = undefined;
 
-    if (day <= end && day + 6 < 42) {
-      start = day;
-      end = start + 6;
-    } else if (day >= end && day - 6 >= 0) {
-      end = day;
-      start = end - 6;
+    if ((dateState.endDate && day <= dateState.endDate) || index + 6 < 42) {
+      startDate = day;
+      endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 6
+      );
+    } else if (
+      (dateState.startDate && day <= dateState.startDate) ||
+      index - 6 >= 0
+    ) {
+      endDate = day;
+      startDate = new Date(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate() - 6
+      );
     } else {
-      start = 999;
-      end = 999;
+      startDate = undefined;
+      endDate = undefined;
     }
 
     setDateState({
-      startDate: calendarState.calendar[start][start],
-      endDate: calendarState.calendar[end][end],
-    });
-
-    setCalendarState({
-      ...calendarState,
-      start,
-      end,
+      startDate,
+      endDate,
     });
   };
 
   const onMonthChange = (direction: -1 | 1) => {
-    let month = calendarState.date.getMonth();
-    let year = calendarState.date.getFullYear();
+    setDateState(() => {
+      return {
+        startDate: undefined,
+        endDate: undefined,
+      };
+    });
 
-    if (month === 0 && direction === -1) {
-      year -= 1;
-      month = 11;
-    } else if (month === 11 && direction === 1) {
-      year += 1;
-      month = 0;
-    } else {
-      month += direction;
-    }
-
-    setCalendarState({
-      ...calendarState,
-      calendar: initializeCalendar(new Date(year, month)),
-      date: new Date(year, month),
+    setCalendarState((previousState) => {
+      return {
+        ...calendarState,
+        monthOffset: previousState.monthOffset + direction,
+      };
     });
   };
 
   return (
     <div className="calendar">
       <div className="calendar-header">
-        {calendarState.date.getMonth() === 0 &&
-        calendarState.date.getFullYear() === 2015 ? (
+        {calendarState.monthOffset <= -24 ? (
           <div>
             <i className="fas fa-arrow-left"></i>
           </div>
@@ -173,14 +199,9 @@ export default () => {
           </div>
         )}
         <div>
-          <h2>
-            {`${
-              DATE_MAP[calendarState.date.getMonth()]["long"]
-            } - ${calendarState.date.getFullYear()}`}
-          </h2>
+          <h2>{getDate()}</h2>
         </div>
-        {calendarState.date.getMonth() === 11 &&
-        calendarState.date.getFullYear() === 2025 ? (
+        {calendarState.monthOffset >= 24 ? (
           <div>
             <i className="fas fa-arrow-right"></i>
           </div>
@@ -203,11 +224,11 @@ export default () => {
           return (
             <div
               key={i}
-              onClick={() => onDayClick(i)}
-              className={getCalendarClass(i, "calendar-cell")}
+              onClick={() => onDayClick(day, i)}
+              className={getCalendarClass(day, "calendar-cell")}
             >
-              <div className={getCalendarClass(i, "calendar-day")}>
-                {day[i].getDate()}
+              <div className={getCalendarClass(day, "calendar-day")}>
+                {day.getDate()}
               </div>
             </div>
           );

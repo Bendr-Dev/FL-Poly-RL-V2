@@ -9,19 +9,21 @@ export default () => {
 
   useEffect(() => {
     const data = async () => {
-      const [error, events]: any[] = await getData(
-        `/api/events/weekly/${dateState.startDate
-          ?.toISOString()
-          .replace(/\//g, "-")}&${dateState.endDate
-          ?.toISOString()
-          .replace(/\//g, "-")}`
-      );
+      if (dateState.startDate && dateState.endDate) {
+        const [error, events]: any[] = await getData(
+          `/api/events/weekly/${dateState.startDate
+            ?.toISOString()
+            .replace(/\//g, "-")}&${dateState.endDate
+            ?.toISOString()
+            .replace(/\//g, "-")}`
+        );
 
-      if (error) {
-        console.error(error);
+        if (error) {
+          console.error(error);
+        }
+
+        !!events && setEvents(events);
       }
-
-      !!events && setEvents(events);
     };
     data();
   }, [dateState]);
