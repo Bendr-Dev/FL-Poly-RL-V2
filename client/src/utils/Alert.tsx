@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, Fragment } from "react";
-import { v4 as uuid } from "uuid";
 import { AlertContext } from "../App";
 
 export interface IAlert {
   type?: "warn" | "success";
   message: string;
-  id: string;
+  duration: number;
 }
 
 export interface IAlertState {
@@ -14,12 +13,13 @@ export interface IAlertState {
 
 export const createAlerts = (
   message: string,
+  duration: number = 3000,
   type?: "warn" | "success"
 ): IAlert => {
   return {
     message,
     type,
-    id: uuid(),
+    duration,
   };
 };
 
