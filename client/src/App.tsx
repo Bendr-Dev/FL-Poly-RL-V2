@@ -4,7 +4,7 @@ import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Alert, { IAlertState } from "./utils/Alert";
+import Alert, { IAlertState, createAlert } from "./utils/Alert";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
@@ -48,6 +48,9 @@ export default () => {
 
         const [error, response] = await getData("/api/users/me");
 
+        setAlertState((currentState) => {
+          return { alerts: [...currentState.alerts] };
+        });
         if (error) {
           if (error.status === 401) {
             setAuthState({

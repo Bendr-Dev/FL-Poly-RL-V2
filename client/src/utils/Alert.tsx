@@ -11,7 +11,7 @@ export interface IAlertState {
   alerts: IAlert[];
 }
 
-export const createAlerts = (
+export const createAlert = (
   message: string,
   duration: number = 3000,
   type?: "warn" | "success"
@@ -40,7 +40,7 @@ export default () => {
             alerts: currentState.alerts.slice(1),
           };
         });
-      }, 4000);
+      }, alertState.alerts[0].duration);
       return () => clearTimeout(timer);
     }
   }, [alertState.alerts]);
