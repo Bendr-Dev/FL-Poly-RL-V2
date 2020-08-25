@@ -49,7 +49,9 @@ export default () => {
         const [error, response] = await getData("/api/users/me");
 
         setAlertState((currentState) => {
-          return { alerts: [...currentState.alerts] };
+          return {
+            alerts: [...currentState.alerts],
+          };
         });
         if (error) {
           if (error.status === 401) {

@@ -79,6 +79,7 @@ label {
   margin-bottom: 0.25rem;
 }
 
+/* Alert handler */
 .alert {
   display: flex;
   justify-content: center;
@@ -86,22 +87,22 @@ label {
   overflow: hidden;
   z-index: 99;
   position: fixed;
-  top: 90%;
+  top: 1%;
   left: 50%;
-  margin-left: -125px;
-  width: 250px;
-  height: 75px;
+  margin-left: -250px;
+  width: 500px;
+  height: 50px;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .alert.warn {
-  background: rgba(255, 0, 0, 0.4);
+  background: rgba(255, 0, 0, 0.3);
 }
 
 .alert.success {
-  background: rgba(0, 255, 0, 0.5);
+  background: rgba(0, 255, 0, 0.3);
 }
 
 .alert > span {
