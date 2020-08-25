@@ -29,6 +29,21 @@
   cursor: pointer;
 }
 
+.btn-small {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 3px;
+  background-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
+}
+
+.btn-small:hover {
+  box-shadow: 0 0 15px 2px var(--primary-hover-color), 3px 3px 10px 2.5px #000;
+  background-color: var(--primary-hover-color);
+  cursor: pointer;
+}
+
 .line-break-primary {
   width: 100%;
   height: 1px;
@@ -153,6 +168,7 @@ form {
 .weekly-body {
   display: flex;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .weekly-day {
@@ -162,14 +178,27 @@ form {
   padding-top: 1.5rem;
 }
 
-.weekly-day .day-header {
-  margin-bottom: 1rem;
+.day-header {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #424242;
+  flex-direction: row;
 }
 
 .weekly-event {
-  padding: 1rem;
+  cursor: pointer;
+  margin: 1rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.5rem;
+  background-color: #444;
+  border-radius: 3px;
+}
+
+.weekly-event:hover {
+  background-color: #555;
+}
+
+.vertical-divider {
+  width: 1px;
+  background-color: #424242;
 }
 
 .calendar {
@@ -187,6 +216,7 @@ form {
   background-color: var(--card-gray);
   border-radius: 0.25rem;
   box-shadow: 4px 4px 5px #0c0d0e;
+  height: 10rem;
 }
 
 /* Recent tournaments */
