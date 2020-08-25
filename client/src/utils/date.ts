@@ -51,7 +51,7 @@ export const DATE_MAP: {
   },
 };
 
-export const DAYS_OF_WEEK = {
+export const DAYS_OF_WEEK: { [key: number]: any } = {
   0: {
     long: "Sunday",
     short: "Sun",

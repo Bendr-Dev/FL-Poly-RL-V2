@@ -1,6 +1,6 @@
 export const postData = async (url: string, data: any) => {
   let payload: any = {};
-  let error = {};
+  let error = null;
   try {
     const response = await fetch(url, {
       method: "POST",

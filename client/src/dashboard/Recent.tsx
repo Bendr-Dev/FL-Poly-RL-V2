@@ -7,7 +7,7 @@ export default () => {
   useEffect(() => {
     const data = async () => {
       const [error, tournaments]: any[] = await getData(
-        "/api/tournaments/recent/5"
+        "/api/tournaments/recent/3"
       );
 
       if (error) {
