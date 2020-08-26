@@ -13,11 +13,7 @@ export default () => {
       </div>
 
       <div className="route">
-        <NavLink
-          to="/tournaments"
-          activeClassName="selected-route"
-          className="route"
-        >
+        <NavLink to="/tournaments" activeClassName="selected-route">
           <span className="route-content">
             <i className="fa fa-trophy" /> Tournaments
           </span>

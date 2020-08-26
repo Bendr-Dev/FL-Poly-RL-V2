@@ -66,6 +66,7 @@ nav.main-nav h1 {
   margin-left: 1rem;
 }
 
+/* Side Nav */
 nav.side-nav {
   background-color: var(--card-gray);
   color: #fff;
@@ -75,21 +76,11 @@ nav.side-nav {
   min-height: 100vh;
 }
 
-.side-nav .route {
-  display: flex;
-  color: #424242;
-  width: 100%;
-  height: 75px;
-  align-content: center;
-}
+/* Side Nav Route */
 
-.side-nav .selected-route i {
-  box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
-}
+/* Side Nav Selected Route */
 
-.side-nav .selected-route {
-  color: var(--primary-color);
-}
+/* Side Nav Route Content */
 
 div.content-area {
   display: flex;
