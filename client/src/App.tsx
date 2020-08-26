@@ -9,6 +9,7 @@ import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import { getData } from "./utils/http";
+import { Tournament } from "./tournament/Tournament";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -92,6 +93,13 @@ export default () => {
                     component={Dashboard}
                     isLoggedIn={authState.isLoggedIn}
                     loading={authState.loading}
+                  />
+                  <ProtectedRoute
+                    exact
+                    path="/tournaments"
+                    component={Tournament}
+                    isLoggedIn={authState.isLoggedIn}
+                    loading={authState.isLoggedIn}
                   />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
