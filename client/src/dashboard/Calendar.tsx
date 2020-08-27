@@ -45,11 +45,6 @@ export default () => {
 
     let startOfMonth = new Date(date.getFullYear(), date.getMonth()).getDay();
 
-    console.log(startOfMonth);
-    console.log(
-      new Date(date.getFullYear(), date.getMonth() + calendarState.monthOffset)
-    );
-
     const newCalendar: Date[] = [];
 
     for (let i = 0; i < 7 * 6; i++) {
