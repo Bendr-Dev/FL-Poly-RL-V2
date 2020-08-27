@@ -1,5 +1,4 @@
 :root {
-  --main-nav-height: 4rem;
   --card-gray: #202125;
   --primary-color: #be00fe;
   --primary-hover-color: #a432cb;
@@ -51,40 +50,82 @@
   box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
 }
 
-nav.main-nav {
-  width: 100%;
-  background-color: var(--card-gray);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: var(--main-nav-height);
-}
-
-nav.main-nav h1 {
-  font-size: 1.2rem;
-  margin-left: 1rem;
-}
-
 /* Side Nav */
 nav.side-nav {
+  display: flex;
   background-color: var(--card-gray);
   color: #fff;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 15rem;
   min-height: 100vh;
+  box-shadow: 4px 4px 5px #0c0d0e;
 }
 
 /* Side Nav Route */
+nav.side-nav .route {
+  padding: 1rem 2rem;
+  text-align: center;
+  width: 100%;
+  display: flex;
+}
+
+nav.side-nav .route div {
+  justify-content: space-between;
+}
+
+nav.side-nav a {
+  height: 2rem;
+  width: 100%;
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+}
 
 /* Side Nav Selected Route */
+nav.side-nav .route .selected-route {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
+  border-radius: 3px;
+}
 
 /* Side Nav Route Content */
+nav.side-nav .route .route-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav.side-nav .route .route-content div {
+  width: 100%;
+}
+
+nav.side-nav .route .route-content i {
+  color: #424242;
+  margin: 0 0.6rem;
+}
+
+nav.side-nav .route .route-content span {
+  color: #fff;
+  text-align: start;
+}
+
+/* Side Nav footer */
+nav.side-nav .footer {
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
+nav.side-nav .footer div {
+  padding: 1.5rem;
+}
 
 div.content-area {
   display: flex;
-  height: calc(100% - var(--main-nav-height));
+  height: 100%;
 }
 
 .container {

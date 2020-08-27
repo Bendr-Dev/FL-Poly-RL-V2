@@ -10,6 +10,8 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import { getData } from "./utils/http";
 import { Tournament } from "./tournament/Tournament";
+import { TeamStat } from "./stat/TeamStat";
+import { PlayerStat } from "./stat/PlayerStat";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -82,7 +84,7 @@ export default () => {
       <AuthContext.Provider value={[authState, setAuthState]}>
         <Router>
           <div className="App">
-            <Navbar></Navbar>
+            {/* <Navbar></Navbar> */}
             <div className="content-area">
               <Sidebar></Sidebar>
               {!authState.loading ? (
@@ -98,6 +100,20 @@ export default () => {
                     exact
                     path="/tournaments"
                     component={Tournament}
+                    isLoggedIn={authState.isLoggedIn}
+                    loading={authState.isLoggedIn}
+                  />
+                  <ProtectedRoute
+                    exact
+                    path="/teamstats"
+                    component={TeamStat}
+                    isLoggedIn={authState.isLoggedIn}
+                    loading={authState.isLoggedIn}
+                  />
+                  <ProtectedRoute
+                    exact
+                    path="/playerstats"
+                    component={PlayerStat}
                     isLoggedIn={authState.isLoggedIn}
                     loading={authState.isLoggedIn}
                   />
