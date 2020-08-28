@@ -14,8 +14,8 @@ const initPlayerData = (players: any) => {
 };
 
 export default () => {
-  const [players, setPlayers] = useState<any>([]);
-  const [carouselState, setCarouselState] = useState<number>(0);
+  const [players, setPlayers] = useState<any[]>([]);
+  const [carouselState, setCarouselState] = useState<any>(0);
   const initialize = useCallback(initPlayerData, [players]);
   // Grabs averages stat data
   const data = async () => {
@@ -34,16 +34,15 @@ export default () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (carouselState < players.length - 1) {
-        setCarouselState((currentState: number) => {
-          return currentState + 1;
-        });
-      } else if (carouselState === players.length - 1) {
-        setCarouselState(() => {
-          return 0;
+      if (carouselState === 0) {
+        setCarouselState(1);
+      } else if (carouselState === 1) {
+        setCarouselState(0);
+        setPlayers((currentState: any[]) => {
+          return [...currentState.slice(1), ...currentState.slice(0, 1)];
         });
       }
-    }, 5000);
+    }, 2500);
     return () => clearInterval(interval);
   }, [players, carouselState]);
 
@@ -51,17 +50,29 @@ export default () => {
     <div className="player-carousel">
       <div
         className="player-container"
-        style={{
-          width: `${players.length * 100}%`,
-          transform: `translateX(-${(carouselState * 100) / players.length}%)`,
-        }}
+        style={
+          carouselState === 1
+            ? {
+                width: `${100 * players.length}%`,
+                transform: `translateX(-${
+                  (carouselState * 100) / players.length
+                }%)`,
+              }
+            : {
+                width: `${100 * players.length}%`,
+                transform: `translateX(-${
+                  (carouselState * 100) / players.length
+                }%)`,
+                transition: "none",
+              }
+        }
       >
         {players.map((player: any) => {
           return (
             <div
               className="player-stats"
               style={{
-                width: `${100 / players.length}%`,
+                width: `100%`,
               }}
               key={player.name}
             >
