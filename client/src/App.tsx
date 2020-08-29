@@ -12,11 +12,26 @@ import { getData } from "./utils/http";
 import { Tournament } from "./tournament/Tournament";
 import { TeamStat } from "./stat/TeamStat";
 import { PlayerStat } from "./stat/PlayerStat";
+import Modal from "./utils/Modal";
 
 export interface IAuthState {
   isLoggedIn: boolean;
   user: any;
   loading: boolean;
+}
+
+export interface IModalComponentProps {
+  componentState?: any;
+  onSubmit?: () => {};
+  onModalCleanup: () => void;
+  onCancel?: () => {};
+  onClickOutside?: () => {};
+}
+
+export interface IModalState {
+  display: boolean;
+  ModalChild: React.FC<IModalComponentProps> | null;
+  data: IModalComponentProps;
 }
 
 export const AlertContext = createContext([
@@ -27,6 +42,7 @@ export const AlertContext = createContext([
 ] as [IAlertState, any]);
 
 export const AuthContext = createContext([{}, () => {}] as [IAuthState, any]);
+export const ModalContext = createContext([{}, () => {}] as [IModalState, any]);
 
 export default () => {
   const [authState, setAuthState] = useState({
@@ -36,6 +52,11 @@ export default () => {
   });
   const [alertState, setAlertState] = useState<IAlertState>({
     alerts: [],
+  });
+  const [modalState, setModalState] = useState<any>({
+    display: false,
+    ModalChild: null,
+    data: {},
   });
 
   useEffect(() => {
@@ -82,51 +103,54 @@ export default () => {
   return (
     <AlertContext.Provider value={[alertState, setAlertState]}>
       <AuthContext.Provider value={[authState, setAuthState]}>
-        <Router>
-          <div className="App">
-            {/* <Navbar></Navbar> */}
-            <div className="content-area">
-              <Sidebar></Sidebar>
-              {!authState.loading ? (
-                <Switch>
-                  <ProtectedRoute
-                    exact
-                    path={["/dashboard", "/"]}
-                    component={Dashboard}
-                    isLoggedIn={authState.isLoggedIn}
-                    loading={authState.loading}
-                  />
-                  <ProtectedRoute
-                    exact
-                    path="/tournaments"
-                    component={Tournament}
-                    isLoggedIn={authState.isLoggedIn}
-                    loading={authState.isLoggedIn}
-                  />
-                  <ProtectedRoute
-                    exact
-                    path="/teamstats"
-                    component={TeamStat}
-                    isLoggedIn={authState.isLoggedIn}
-                    loading={authState.isLoggedIn}
-                  />
-                  <ProtectedRoute
-                    exact
-                    path="/playerstats"
-                    component={PlayerStat}
-                    isLoggedIn={authState.isLoggedIn}
-                    loading={authState.isLoggedIn}
-                  />
-                  <Route exact path="/login" component={Login} />
-                  <Route exact path="/register" component={Register} />
-                </Switch>
-              ) : (
-                <span>loading {authState.loading.toString()}</span>
-              )}
+        <ModalContext.Provider value={[modalState, setModalState]}>
+          <Router>
+            <div className="App">
+              {/* <Navbar></Navbar> */}
+              <div className="content-area">
+                <Sidebar></Sidebar>
+                {!authState.loading ? (
+                  <Switch>
+                    <ProtectedRoute
+                      exact
+                      path={["/dashboard", "/"]}
+                      component={Dashboard}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.loading}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/tournaments"
+                      component={Tournament}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/teamstats"
+                      component={TeamStat}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/playerstats"
+                      component={PlayerStat}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/register" component={Register} />
+                  </Switch>
+                ) : (
+                  <span>loading {authState.loading.toString()}</span>
+                )}
+              </div>
             </div>
-          </div>
-        </Router>
-        <Alert></Alert>
+          </Router>
+          <Modal></Modal>
+          <Alert></Alert>
+        </ModalContext.Provider>
       </AuthContext.Provider>
     </AlertContext.Provider>
   );

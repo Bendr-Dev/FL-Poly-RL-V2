@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState, Fragment } from "react";
+import { ModalContext } from "../App";
 import { DateContext } from "./Dashboard";
 import { getData } from "../utils/http";
 import { DAYS_OF_WEEK } from "../utils/date";
+import EventForm from "./EventForm";
 
 export default () => {
   const [dateState, setDateState] = useContext(DateContext);
+  const [modalState, setModalState] = useContext(ModalContext);
   const [events, setEvents] = useState<any>([]);
 
   useEffect(() => {
@@ -27,6 +30,21 @@ export default () => {
     };
     data();
   }, [dateState]);
+
+  const onCreateClick = () => {
+    setModalState({
+      display: true,
+      ModalChild: EventForm,
+      data: {
+        onSubmit: () => {
+          console.log("testest");
+        },
+        onCancel: () => {
+          console.log("cancelled");
+        },
+      },
+    });
+  };
 
   const formatTime = (time: Date): string => {
     let hours = new Date(time).getHours();
@@ -59,7 +77,9 @@ export default () => {
           <span></span>
         )}
 
-        <div className="btn-small">+ Create Event</div>
+        <div className="btn-small" onClick={() => onCreateClick()}>
+          + Create Event
+        </div>
       </div>
       <div className="line-break-primary"></div>
       <div className="weekly-body">
