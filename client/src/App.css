@@ -152,8 +152,8 @@ label {
   position: fixed;
   top: 1%;
   left: 50%;
-  margin-left: -250px;
-  width: 500px;
+  max-width: 500px;
+  transform: translate(-50%, 0);
   height: 50px;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
