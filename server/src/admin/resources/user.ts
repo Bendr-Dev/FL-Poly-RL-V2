@@ -56,7 +56,7 @@ userRouter.put(
 
       res.status(200).json(user);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       res.status(500).send("Server Error while trying to update user");
     }
   }

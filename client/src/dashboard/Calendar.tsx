@@ -1,13 +1,17 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { DATE_MAP, DAYS_OF_WEEK } from "../utils/date";
 import { DateContext } from "./Dashboard";
-import { start } from "repl";
 
 interface ICalendarState {
   calendar: Date[];
   monthOffset: number;
 }
 
+/**
+ * Proper comparison of two dates based on string representation
+ * @param first - date to be compared
+ * @param second - date to be compared
+ */
 const dateComparison = (
   first: Date | undefined,
   second: Date | undefined
@@ -27,6 +31,10 @@ export default () => {
     monthOffset: 0,
   });
 
+  /**
+   * Create the calendar object and sets it in state
+   * Month depends on current states monthOffset
+   */
   const initializeCalendar = (): void => {
     // Takes the index of the day
 
@@ -64,10 +72,11 @@ export default () => {
       };
     });
   };
-
+  // create a memoized version of initialize calendar to reduce calc on change
   const initalize = useCallback(initializeCalendar, [
     calendarState.monthOffset,
   ]);
+  // memoized function to get date based off of offset
   const getDate = useCallback(() => {
     const tempDate = new Date();
     const date = new Date(
@@ -77,6 +86,7 @@ export default () => {
 
     return `${DATE_MAP[date.getMonth()]["long"]} - ${date.getFullYear()}`;
   }, [calendarState.monthOffset]);
+
   useEffect(initalize, [calendarState.monthOffset]);
 
   /**
@@ -128,6 +138,7 @@ export default () => {
 
     return classes.join(" ");
   };
+
   /**
    * On click, ensure that the new selection is saved and that
    * there is atleast a 7 day difference between the start and end
@@ -159,24 +170,33 @@ export default () => {
       endDate = undefined;
     }
 
-    setDateState({
-      startDate,
-      endDate,
+    setDateState((currentState) => {
+      return {
+        ...currentState,
+        startDate,
+        endDate,
+      };
     });
   };
 
+  /**
+   * Reset date state to undefined values, and updates the calendar
+   * @param direction - change to the month offset
+   */
   const onMonthChange = (direction: -1 | 1) => {
-    setDateState(() => {
+    setDateState((currentState) => {
       return {
+        ...currentState,
         startDate: undefined,
         endDate: undefined,
       };
     });
 
-    setCalendarState((previousState) => {
+    setCalendarState((currentState) => {
       return {
         ...calendarState,
-        monthOffset: previousState.monthOffset + direction,
+        // this will force initialize calendar
+        monthOffset: currentState.monthOffset + direction,
       };
     });
   };

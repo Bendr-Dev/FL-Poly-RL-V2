@@ -4,9 +4,14 @@ import { Redirect, Link } from "react-router-dom";
 import { postData } from "../utils/http";
 import { useForm } from "react-hook-form";
 
+interface ILogin {
+  email: string;
+  password: string;
+}
+
 export default () => {
   const [authState, setAuthState] = useContext(AuthContext);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ILogin>({
     email: "",
     password: "",
   });
@@ -17,16 +22,21 @@ export default () => {
     mode: "onBlur",
   });
 
-  const onSubmit = async (e: any) => {
+  /**
+   * Submits the form to the server and handles returned data
+   */
+  const onSubmit = async () => {
     try {
-      setAuthState({
-        loading: true,
+      setAuthState((currentState) => {
+        return {
+          ...currentState,
+          loading: true,
+        };
       });
 
       const [error, response] = await postData("/api/users/login", formData);
 
       if (error) {
-        console.log(error);
         if (error.status === 401) {
           setAuthState({
             isLoggedIn: false,

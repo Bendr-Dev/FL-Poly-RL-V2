@@ -82,7 +82,7 @@ eventRouter.get("/", auth, async (req: Request, res: Response) => {
 
     res.status(200).json(events);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res
       .status(500)
       .json({ error: { msg: "Server error trying to get all events" } });
@@ -121,7 +121,7 @@ eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
 
     res.status(200).json(event);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({
       error: {
         msg: `Server error trying to get event with id ${req.params.eventId}`,

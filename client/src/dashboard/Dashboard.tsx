@@ -3,17 +3,23 @@ import Events from "./Events";
 import Calendar from "./Calendar";
 import Recent from "./Recent";
 import Player from "./Player";
-import { start } from "repl";
-import Alert from "../utils/Alert";
 
-export interface IDateContext {
+export interface IDateState {
   startDate?: Date;
   endDate?: Date;
   init: boolean;
 }
 
-export const DateContext = createContext([{}, () => {}] as [IDateContext, any]);
+export const DateContext = createContext<
+  [IDateState, React.Dispatch<React.SetStateAction<IDateState>>]
+>([
+  {
+    init: false,
+  },
+  () => {},
+]);
 
+// Initializes the date state
 const initDate = () => {
   const startDate = new Date();
   const endDate = new Date(
@@ -30,7 +36,7 @@ const initDate = () => {
 };
 
 export default () => {
-  const [dateState, setDateState] = useState(initDate());
+  const [dateState, setDateState] = useState<IDateState>(initDate());
 
   return (
     <DateContext.Provider value={[dateState, setDateState]}>

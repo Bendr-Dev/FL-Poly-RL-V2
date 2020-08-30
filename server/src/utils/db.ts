@@ -28,6 +28,6 @@ export default async () => {
 
     console.log("Connected to MongoDB!");
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };

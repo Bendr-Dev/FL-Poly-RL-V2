@@ -22,7 +22,7 @@ export const postData = async (url: string, data: any) => {
   }
 };
 
-export const getData = async (url: string) => {
+export const getData = async <T>(url: string): Promise<[any, T]> => {
   let payload: any = {};
   let error: any = null;
   try {
@@ -39,7 +39,7 @@ export const getData = async (url: string) => {
       error = { ...payload["error"], status: response.status };
     }
 
-    return [error, payload];
+    return [error, payload as T];
   } catch (error) {
     throw error;
   }

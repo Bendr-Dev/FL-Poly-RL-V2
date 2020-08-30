@@ -4,9 +4,20 @@ import { postData } from "../utils/http";
 import { Redirect, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+interface IRegister {
+  name: string;
+  username: string;
+  email: string;
+  discordId: string;
+  steam64Id: string;
+  password: string;
+  password2: string;
+  role: string;
+}
+
 export default () => {
   const [authState, setAuthState] = useContext(AuthContext);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IRegister>({
     name: "",
     username: "",
     email: "",
@@ -33,8 +44,11 @@ export default () => {
 
   const onSubmit = async (e: any) => {
     try {
-      setAuthState({
-        loading: true,
+      setAuthState((currentState) => {
+        return {
+          ...currentState,
+          loading: true,
+        };
       });
 
       const [error, response] = await postData("/api/users/register", formData);
