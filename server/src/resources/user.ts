@@ -248,7 +248,7 @@ userRouter.post("/refresh", (req: Request, res: Response) => {
       .cookie("x-auth-token", accessToken, { httpOnly: true })
       .json({ login: true });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: { msg: "Server error token is not valid" } });
   }
 });
@@ -269,7 +269,7 @@ userRouter.get("/me", auth, async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({
       error: { msg: `Server error couldn't find logged in user data` },
     });
@@ -311,7 +311,7 @@ userRouter.put("/edit", auth, async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res
       .status(500)
       .json({ error: { msg: "Server error while trying to update user" } });
@@ -329,7 +329,7 @@ userRouter.post("/logout", (req: Request, res: Response) => {
 
     res.status(200).json({ logout: true });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res
       .status(500)
       .json({ error: { msg: "Server error while trying to logout user" } });

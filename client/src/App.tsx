@@ -1,10 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
 import "./App.css";
-import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Alert, { IAlertState, createAlert } from "./utils/Alert";
+import Alert, { IAlertState } from "./utils/Alert";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
@@ -13,6 +12,7 @@ import { Tournament } from "./tournament/Tournament";
 import { TeamStat } from "./stat/TeamStat";
 import { PlayerStat } from "./stat/PlayerStat";
 import Modal from "./utils/Modal";
+import { IUser } from "./common/User.Interface";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -31,21 +31,41 @@ export interface IModalComponentProps {
 export interface IModalState {
   display: boolean;
   ModalChild: React.FC<IModalComponentProps> | null;
-  data: IModalComponentProps;
+  data: Partial<IModalComponentProps>;
 }
 
-export const AlertContext = createContext([
+export const AlertContext = createContext<
+  [IAlertState, React.Dispatch<React.SetStateAction<IAlertState>>]
+>([
   {
     alerts: [],
   },
   () => {},
-] as [IAlertState, any]);
+]);
 
-export const AuthContext = createContext([{}, () => {}] as [IAuthState, any]);
-export const ModalContext = createContext([{}, () => {}] as [IModalState, any]);
+export const AuthContext = createContext<
+  [IAuthState, React.Dispatch<React.SetStateAction<IAuthState>>]
+>([
+  {
+    isLoggedIn: false,
+    user: {},
+    loading: true,
+  },
+  () => {},
+]);
+export const ModalContext = createContext<
+  [IModalState, React.Dispatch<React.SetStateAction<IModalState>>]
+>([
+  {
+    display: false,
+    ModalChild: null,
+    data: {},
+  },
+  () => {},
+]);
 
 export default () => {
-  const [authState, setAuthState] = useState({
+  const [authState, setAuthState] = useState<IAuthState>({
     isLoggedIn: false,
     user: {},
     loading: true,
@@ -53,7 +73,7 @@ export default () => {
   const [alertState, setAlertState] = useState<IAlertState>({
     alerts: [],
   });
-  const [modalState, setModalState] = useState<any>({
+  const [modalState, setModalState] = useState<IModalState>({
     display: false,
     ModalChild: null,
     data: {},
@@ -70,7 +90,7 @@ export default () => {
           };
         });
 
-        const [error, response] = await getData("/api/users/me");
+        const [error, response] = await getData<IUser>("/api/users/me");
 
         setAlertState((currentState) => {
           return {
@@ -94,7 +114,7 @@ export default () => {
             });
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     checkAuth();

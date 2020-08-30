@@ -11,6 +11,12 @@ export interface IAlertState {
   alerts: IAlert[];
 }
 
+/**
+ * Creates an alert object to be entered into the alert state
+ * @param message - the message string to be displayed
+ * @param duration - how long the message will be displayed in ms
+ * @param type - whether the alert is a success, warn, or neutral alert
+ */
 export const createAlert = (
   message: string,
   duration: number = 3000,
@@ -43,7 +49,7 @@ export default () => {
       }, alertState.alerts[0].duration);
       return () => clearTimeout(timer);
     }
-  }, [alertState.alerts]);
+  }, [alertState.alerts, setAlertStart]);
 
   return (
     <Fragment>
