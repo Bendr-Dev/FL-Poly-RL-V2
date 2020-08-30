@@ -314,12 +314,53 @@ form {
   max-width: 100%;
 }
 
+/* Player Carousel */
 .player-carousel {
   grid-area: carousel;
   background-color: var(--card-gray);
   border-radius: 4px;
   box-shadow: 4px 4px 5px #0c0d0e;
   height: 10rem;
+  overflow: hidden;
+}
+
+.player-container {
+  display: flex;
+  height: 100%;
+  transition-property: transform;
+  transition-duration: 1s;
+}
+
+.player-stats {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  align-items: center;
+  padding: 1rem 4rem;
+}
+
+.player-stats div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+.player-stats div span {
+  color: #656565;
+  padding-right: 0.5rem;
+}
+
+.player-stats div:first-child {
+  height: 100%;
+  flex-basis: 25%;
+}
+
+.line-break-vertical {
+  width: 1px;
+  height: 75%;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
 }
 
 /* Recent tournaments */
