@@ -1,16 +1,51 @@
-import React, { useContext, useEffect, useState, Fragment } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  Fragment,
+} from "react";
+import { ModalContext } from "../App";
 import { DateContext } from "./Dashboard";
 import { getData } from "../utils/http";
 import { DAYS_OF_WEEK } from "../utils/date";
+import EventForm from "./EventForm";
+import { IEvent } from "../common/Event.Interface";
 
+/**
+ * Pure function which creates a timestamp for the event
+ * @param time - the time in as a date object
+ */
+const formatTime = (time: Date): string => {
+  let hours = new Date(time).getHours();
+  const minutes = new Date(time).getMinutes();
+  let dayStatus: "PM" | "AM";
+
+  if (hours >= 12 && hours !== 24) {
+    dayStatus = "PM";
+  } else {
+    dayStatus = "AM";
+  }
+
+  if (hours > 12) {
+    hours = hours - 12;
+  }
+
+  return `${hours}:${minutes} ${dayStatus}`;
+};
 export default () => {
-  const [dateState, setDateState] = useContext(DateContext);
-  const [events, setEvents] = useState<any>([]);
+  const [dateState] = useContext(DateContext);
+  const [, setModalState] = useContext(ModalContext);
+  const [events, setEvents] = useState<IEvent[]>([]);
 
+  // Memoizes formatTime
+  const formatTimeCallback = useCallback(formatTime, [events]);
+
+  // Initial call for event data
   useEffect(() => {
     const data = async () => {
       if (dateState.startDate && dateState.endDate) {
-        const [error, events]: any[] = await getData(
+        const [error, events] = await getData<IEvent[]>(
           `/api/events/weekly/${dateState.startDate
             ?.toISOString()
             .replace(/\//g, "-")}&${dateState.endDate
@@ -28,22 +63,12 @@ export default () => {
     data();
   }, [dateState]);
 
-  const formatTime = (time: Date): string => {
-    let hours = new Date(time).getHours();
-    const minutes = new Date(time).getMinutes();
-    let dayStatus: "PM" | "AM";
-
-    if (hours >= 12 && hours !== 24) {
-      dayStatus = "PM";
-    } else {
-      dayStatus = "AM";
-    }
-
-    if (hours > 12) {
-      hours = hours - 12;
-    }
-
-    return `${hours}:${minutes} ${dayStatus}`;
+  const onCreateClick = () => {
+    setModalState({
+      display: true,
+      ModalChild: EventForm,
+      data: {},
+    });
   };
 
   return (
@@ -59,7 +84,9 @@ export default () => {
           <span></span>
         )}
 
-        <div className="btn-small">+ Create Event</div>
+        <div className="btn-small" onClick={() => onCreateClick()}>
+          + Create Event
+        </div>
       </div>
       <div className="line-break-primary"></div>
       <div className="weekly-body">
@@ -82,7 +109,7 @@ export default () => {
                     items.map((item: any, j: number) => {
                       return (
                         <div className="weekly-event" key={j}>
-                          <span>{formatTime(item.time)}</span>{" "}
+                          <span>{formatTimeCallback(item.time)}</span>{" "}
                           <div>{item.type}</div>
                         </div>
                       );

@@ -30,6 +30,8 @@
 
 .btn-small {
   cursor: pointer;
+  outline: none;
+  border: none;
   padding: 0.5rem;
   border-radius: 3px;
   background-color: var(--primary-color);
@@ -152,8 +154,8 @@ label {
   position: fixed;
   top: 1%;
   left: 50%;
-  margin-left: -250px;
-  width: 500px;
+  max-width: 500px;
+  transform: translate(-50%, 0);
   height: 50px;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
@@ -172,6 +174,27 @@ label {
   color: #fff;
   width: 100%;
   text-align: center;
+}
+
+/* Modal */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: var(--card-gray);
+  min-width: 300px;
+  min-height: 400px;
+  border-radius: 4px;
 }
 
 form {
@@ -228,7 +251,7 @@ form {
 .weekly-events {
   grid-area: events;
   background-color: var(--card-gray);
-  border-radius: 0.25rem;
+  border-radius: 4px;
   box-shadow: 4px 4px 5px #0c0d0e;
   display: flex;
   flex-direction: column;
@@ -269,7 +292,7 @@ form {
   margin: 1rem 0.5rem 0.5rem 0.5rem;
   padding: 0.5rem;
   background-color: #444;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .weekly-event:hover {
@@ -286,7 +309,7 @@ form {
   background-color: var(--card-gray);
   display: flex;
   flex-direction: column;
-  border-radius: 0.25rem;
+  border-radius: 4px;
   box-shadow: 4px 4px 5px #0c0d0e;
   max-width: 100%;
 }
@@ -295,7 +318,7 @@ form {
 .player-carousel {
   grid-area: carousel;
   background-color: var(--card-gray);
-  border-radius: 0.25rem;
+  border-radius: 4px;
   box-shadow: 4px 4px 5px #0c0d0e;
   height: 10rem;
   overflow: hidden;
@@ -346,7 +369,7 @@ form {
   display: flex;
   flex-direction: column;
   background-color: var(--card-gray);
-  border-radius: 0.25rem;
+  border-radius: 4px;
   box-shadow: 4px 4px 5px #0c0d0e;
   max-width: 100%;
 }
@@ -464,7 +487,7 @@ form {
   min-width: 25rem;
   min-height: 26rem;
   background-color: var(--card-gray);
-  border-radius: 0.25rem;
+  border-radius: 4px;
   margin: 1.5rem;
   box-shadow: 4px 4px 5px #0c0d0e;
 }
@@ -493,7 +516,7 @@ form {
   min-width: 25rem;
   min-height: 26rem;
   background-color: var(--card-gray);
-  border-radius: 0.25rem;
+  border-radius: 4px;
   margin: 1.5rem;
   box-shadow: 4px 4px 5px #0c0d0e;
 }
@@ -521,6 +544,47 @@ form {
 }
 
 .register-actions span {
+  font-size: 0.85rem;
+}
+
+/* Event Form */
+/** Register Form */
+.event-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+  min-width: 25rem;
+  min-height: 26rem;
+  background-color: var(--card-gray);
+  border-radius: 4px;
+  margin: 1.5rem;
+  box-shadow: 4px 4px 5px #0c0d0e;
+}
+
+.event-form form {
+  display: flex;
+}
+
+.event-form .form-column {
+  min-width: 28rem;
+  /* width: 25rem; */
+  padding: 0 1.5rem;
+  height: 100%;
+}
+
+.event-form .line-break-primary {
+  margin-bottom: 2rem;
+}
+
+.event-actions {
+  margin: 1.3rem 0;
+  width: 100%;
+  text-align: center;
+  color: #aaa;
+}
+
+.event-actions span {
   font-size: 0.85rem;
 }
 
