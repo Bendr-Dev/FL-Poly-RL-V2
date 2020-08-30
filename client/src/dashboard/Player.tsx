@@ -1,7 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getData } from "../utils/http";
 
-const initPlayerData = (players: any) => {
+interface IPlayer {
+  name: string;
+  goalsAvg: number;
+  assistsAvg: number;
+  shotsAvg: number;
+  savesAvg: number;
+}
+
+interface IStatSummary {
+  stats: {
+    [key: string]: IPlayer;
+  };
+}
+
+const initPlayerData = (players: IStatSummary): IPlayer[] => {
   return Object.keys(players.stats).map((key: string) => {
     return {
       name: key,
@@ -14,12 +28,12 @@ const initPlayerData = (players: any) => {
 };
 
 export default () => {
-  const [players, setPlayers] = useState<any[]>([]);
-  const [carouselState, setCarouselState] = useState<any>(0);
+  const [players, setPlayers] = useState<IPlayer[]>([]);
+  const [carouselState, setCarouselState] = useState<number>(0);
   const initialize = useCallback(initPlayerData, [players]);
   // Grabs averages stat data
   const data = async () => {
-    const [error, stats]: any[] = await getData("/api/summary/");
+    const [error, stats] = await getData<IStatSummary[]>("/api/summary/");
 
     if (error) {
       console.error(error);
@@ -38,7 +52,7 @@ export default () => {
         setCarouselState(1);
       } else if (carouselState === 1) {
         setCarouselState(0);
-        setPlayers((currentState: any[]) => {
+        setPlayers((currentState) => {
           return [...currentState.slice(1), ...currentState.slice(0, 1)];
         });
       }
