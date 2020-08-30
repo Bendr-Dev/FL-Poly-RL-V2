@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import "./App.css";
-import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
 import Dashboard from "./dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
