@@ -588,6 +588,44 @@ form {
   font-size: 0.85rem;
 }
 
+/* Event display */
+.event-content {
+  width: 100%;
+}
+
+.event-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.event-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.event-row div:first-child {
+  color: #ccc;
+}
+
+.event-row div:last-child {
+  color: #fff;
+}
+
+.event-row .fa-check {
+  color: #00ff00;
+}
+
+.event-row .fa-times {
+  color: #ff0000;
+}
+
+.event-attending-user {
+  color: #fff;
+}
+
 @media (max-width: 400px) {
   .login-form {
     min-width: 22rem;
