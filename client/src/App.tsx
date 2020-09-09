@@ -126,7 +126,6 @@ export default () => {
         <ModalContext.Provider value={[modalState, setModalState]}>
           <Router>
             <div className="App">
-              {/* <Navbar></Navbar> */}
               <div className="content-area">
                 <Sidebar></Sidebar>
                 {!authState.loading ? (
