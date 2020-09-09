@@ -57,7 +57,6 @@ export default () => {
         if (error) {
           console.error(error);
         }
-        console.log(events);
         !!events && setEvents(events);
       }
     };
