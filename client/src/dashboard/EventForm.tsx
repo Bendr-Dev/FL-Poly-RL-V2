@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { IModalComponentProps } from "../App";
+import Autocomplete from "../utils/Autocomplete";
 
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    test: ["test", "asdf", "tesfaafafaft"],
+  });
 
   const _onSubmit = () => {
     !!onSubmit && onSubmit();
@@ -36,8 +39,11 @@ export default (props: IModalComponentProps) => {
             <input type="text" name="format" />
           </div>
           <div className="form-group">
-            <label htmlFor="attending">Attending</label>
-            <input type="text" name="attending" />
+            <Autocomplete
+              name="attending"
+              label="Attending"
+              items={formData.test}
+            ></Autocomplete>
           </div>
           <div className="form-group">
             <label htmlFor="link">Link</label>
