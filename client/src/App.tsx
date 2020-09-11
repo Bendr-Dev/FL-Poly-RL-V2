@@ -126,7 +126,6 @@ export default () => {
         <ModalContext.Provider value={[modalState, setModalState]}>
           <Router>
             <div className="App">
-              {/* <Navbar></Navbar> */}
               <div className="content-area">
                 <Sidebar></Sidebar>
                 {!authState.loading ? (
@@ -163,7 +162,7 @@ export default () => {
                     <Route exact path="/register" component={Register} />
                   </Switch>
                 ) : (
-                  <span>loading {authState.loading.toString()}</span>
+                  <span className="loading-spinner"></span>
                 )}
               </div>
             </div>

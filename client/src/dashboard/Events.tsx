@@ -11,6 +11,7 @@ import { getData } from "../utils/http";
 import { DAYS_OF_WEEK } from "../utils/date";
 import EventForm from "./EventForm";
 import { IEvent } from "../common/Event.Interface";
+import EventDisplay from "./EventDisplay";
 
 /**
  * Pure function which creates a timestamp for the event
@@ -56,7 +57,6 @@ export default () => {
         if (error) {
           console.error(error);
         }
-
         !!events && setEvents(events);
       }
     };
@@ -68,6 +68,14 @@ export default () => {
       display: true,
       ModalChild: EventForm,
       data: {},
+    });
+  };
+
+  const onDisplayClick = (event: IEvent) => {
+    setModalState({
+      display: true,
+      ModalChild: EventDisplay,
+      data: { componentState: { event, formatTime } },
     });
   };
 
@@ -106,9 +114,13 @@ export default () => {
                     {DAYS_OF_WEEK[day.getDay()]["long"]}
                   </div>
                   {!!Object.values(eventDay)[0] &&
-                    items.map((item: any, j: number) => {
+                    items.map((item: IEvent, j: number) => {
                       return (
-                        <div className="weekly-event" key={j}>
+                        <div
+                          className="weekly-event"
+                          key={j}
+                          onClick={() => onDisplayClick(item)}
+                        >
                           <span>{formatTimeCallback(item.time)}</span>{" "}
                           <div>{item.type}</div>
                         </div>

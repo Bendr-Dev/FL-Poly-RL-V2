@@ -95,21 +95,10 @@ eventRouter.get("/", auth, async (req: Request, res: Response) => {
  */
 eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
   try {
-    const event = await Event.findById(req.params.eventId)
-      .populate("attending", [
-        "email",
-        "steam64Id",
-        "username",
-        "discordId",
-        "name",
-      ])
-      .populate("uploader", [
-        "email",
-        "steam64Id",
-        "name",
-        "discordId",
-        "username",
-      ]);
+    const event = await Event.findById(req.params.eventId).populate(
+      "attending",
+      ["email", "steam64Id", "username", "discordId", "name"]
+    );
 
     if (!event) {
       return res.status(404).json({
@@ -273,7 +262,22 @@ eventRouter.get(
           $gte: startDate,
           $lt: endDate,
         },
-      }).sort({ time: 1 });
+      })
+        .populate("attending", [
+          "email",
+          "steam64Id",
+          "username",
+          "discordId",
+          "name",
+        ])
+        .populate("uploader", [
+          "email",
+          "steam64Id",
+          "name",
+          "discordId",
+          "username",
+        ])
+        .sort({ time: 1 });
 
       // Grabs days between start and end date
       const getWeekRange = (start: Date, end: Date) => {
