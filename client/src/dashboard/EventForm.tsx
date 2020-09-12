@@ -1,12 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IModalComponentProps } from "../App";
 import Autocomplete from "../utils/Autocomplete";
+import Datepicker, { IDatePickerState } from "../utils/Datepicker";
 
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
   const [formData, setFormData] = useState({
     test: ["test", "asdf", "tesfaafafaft"],
   });
+
+  let currentDate = new Date();
+  const [datePickerData, setDatePickerData] = useState<IDatePickerState>({
+    month: currentDate.getMonth(),
+    day: currentDate.getDate(),
+    year: currentDate.getFullYear(),
+    hour: currentDate.getHours(),
+    minute: currentDate.getMinutes(),
+  });
+
+  useEffect(() => {
+    console.log(datePickerData);
+    currentDate = new Date(
+      datePickerData.month +
+        " " +
+        datePickerData.day +
+        ", " +
+        datePickerData.hour +
+        ":" +
+        datePickerData.minute +
+        ":00"
+    );
+    console.log(currentDate);
+  }, [datePickerData]);
 
   const _onSubmit = () => {
     !!onSubmit && onSubmit();
@@ -53,7 +78,11 @@ export default (props: IModalComponentProps) => {
         <div className="form-column">
           <div className="form-group">
             <label htmlFor="time">Time</label>
-            <input type="text" name="time" />
+            <input name="time" value={datePickerData.month + 1} />
+            <Datepicker
+              datePickerData={datePickerData}
+              setDatePickerData={setDatePickerData}
+            ></Datepicker>
           </div>
           <div className="form-group">
             <label htmlFor="uploader">Uploader</label>
