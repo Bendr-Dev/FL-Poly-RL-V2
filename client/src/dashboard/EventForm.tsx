@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IModalComponentProps } from "../App";
 import Autocomplete from "../utils/Autocomplete";
+import { DATE_MAP } from "../utils/date";
 import Datepicker, { IDatePickerState } from "../utils/Datepicker";
 
 export default (props: IModalComponentProps) => {
@@ -9,18 +10,38 @@ export default (props: IModalComponentProps) => {
     test: ["test", "asdf", "tesfaafafaft"],
   });
 
-  let currentDate = new Date();
+  const formatDate = (datePickerValue: IDatePickerState): string => {
+    for (const [key, value] of Object.entries(datePickerValue)) {
+      if (value.length === 1) {
+        value.replace(/^/, "0");
+      }
+    }
+    return (
+      datePickerData.month +
+      " " +
+      datePickerData.day +
+      ", " +
+      datePickerData.year +
+      " " +
+      datePickerData.hour +
+      ":" +
+      datePickerData.minute
+    );
+  };
+
+  let selectedDate: Date = new Date();
+  let selectedDateString: string = "";
   const [datePickerData, setDatePickerData] = useState<IDatePickerState>({
-    month: currentDate.getMonth(),
-    day: currentDate.getDate(),
-    year: currentDate.getFullYear(),
-    hour: currentDate.getHours(),
-    minute: currentDate.getMinutes(),
+    month: DATE_MAP[selectedDate.getMonth()].long,
+    day: selectedDate.getDate().toString(),
+    year: selectedDate.getFullYear().toString(),
+    hour: selectedDate.getHours().toString(),
+    minute: selectedDate.getMinutes().toString(),
   });
+  selectedDateString = formatDate(datePickerData);
 
   useEffect(() => {
-    console.log(datePickerData);
-    currentDate = new Date(
+    selectedDate = new Date(
       datePickerData.month +
         " " +
         datePickerData.day +
@@ -30,7 +51,8 @@ export default (props: IModalComponentProps) => {
         datePickerData.minute +
         ":00"
     );
-    console.log(currentDate);
+    selectedDateString = formatDate(datePickerData);
+    selectedDate = new Date(selectedDateString);
   }, [datePickerData]);
 
   const _onSubmit = () => {
@@ -77,8 +99,8 @@ export default (props: IModalComponentProps) => {
         </div>
         <div className="form-column">
           <div className="form-group">
-            <label htmlFor="time">Time</label>
-            <input name="time" value={datePickerData.month + 1} />
+            <label htmlFor="time">Start Time</label>
+            <input name="time" value={selectedDateString} />
             <Datepicker
               datePickerData={datePickerData}
               setDatePickerData={setDatePickerData}
