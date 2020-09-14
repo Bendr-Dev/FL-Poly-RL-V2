@@ -637,6 +637,19 @@ form {
   color: #fff;
 }
 
+/* Datepicker */
+.datepicker {
+  margin: 0.5rem 0;
+}
+
+.datepicker select {
+  color: #ccc;
+  font-size: 16px;
+  background-color: #333;
+  border: none;
+  height: 1.5rem;
+}
+
 @media (max-width: 400px) {
   .login-form {
     min-width: 22rem;

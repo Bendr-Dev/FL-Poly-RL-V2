@@ -94,6 +94,40 @@ export default (props: any) => {
     return yearArray;
   };
 
+  const hourOptions = () => {
+    const hourArray = [];
+    for (let index = 0; index < 24; index++) {
+      hourArray.push(
+        <option key={index.toString()} value={index.toString()}>
+          {index.toString()}
+        </option>
+      );
+    }
+
+    return hourArray;
+  };
+
+  const minuteOptions = () => {
+    const minuteArray = [];
+    for (let index = 0; index < 60; index++) {
+      if (index % 10 === index) {
+        minuteArray.push(
+          <option key={"0" + index.toString()} value={"0" + index.toString()}>
+            {"0" + index.toString()}
+          </option>
+        );
+      } else {
+        minuteArray.push(
+          <option key={index.toString()} value={index.toString()}>
+            {index.toString()}
+          </option>
+        );
+      }
+    }
+
+    return minuteArray;
+  };
+
   return (
     <div className="datepicker">
       <select
@@ -109,15 +143,15 @@ export default (props: any) => {
       <select name="year" value={props.datePickerData.year} onChange={onChange}>
         {yearOptions()}
       </select>
-      <select>
-        <option>Hour 1</option>
-        <option>Hour 2</option>
-        <option>Hour 3</option>
+      <select name="hour" value={props.datePickerData.hour} onChange={onChange}>
+        {hourOptions()}
       </select>
-      <select>
-        <option>Minute 1</option>
-        <option>Minute 2</option>
-        <option>Minute 3</option>
+      <select
+        name="minute"
+        value={props.datePickerData.minute}
+        onChange={onChange}
+      >
+        {minuteOptions()}
       </select>
     </div>
   );

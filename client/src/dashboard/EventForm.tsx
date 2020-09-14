@@ -100,7 +100,7 @@ export default (props: IModalComponentProps) => {
         <div className="form-column">
           <div className="form-group">
             <label htmlFor="time">Start Time</label>
-            <input name="time" value={selectedDateString} />
+            <input name="time" value={selectedDateString} onChange={() => {}} />
             <Datepicker
               datePickerData={datePickerData}
               setDatePickerData={setDatePickerData}
