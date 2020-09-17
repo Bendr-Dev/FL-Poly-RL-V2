@@ -162,7 +162,7 @@ export default () => {
                     <Route exact path="/register" component={Register} />
                   </Switch>
                 ) : (
-                  <span>loading {authState.loading.toString()}</span>
+                  <span className="loading-spinner"></span>
                 )}
               </div>
             </div>
