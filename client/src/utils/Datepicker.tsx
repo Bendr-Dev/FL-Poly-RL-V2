@@ -96,10 +96,15 @@ export default (props: any) => {
 
   const hourOptions = () => {
     const hourArray = [];
+    const tempDate = new Date();
     for (let index = 0; index < 24; index++) {
+      tempDate.setHours(index);
+      const outputString: string = tempDate
+        .toLocaleTimeString()
+        .replace(/:\d\d:\d\d/, "");
       hourArray.push(
         <option key={index.toString()} value={index.toString()}>
-          {index.toString()}
+          {outputString}
         </option>
       );
     }
