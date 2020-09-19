@@ -99,12 +99,12 @@ export default (props: any) => {
     const tempDate = new Date();
     for (let index = 0; index < 24; index++) {
       tempDate.setHours(index);
-      const outputString: string = tempDate
+      const hourString: string = tempDate
         .toLocaleTimeString()
         .replace(/:\d\d:\d\d/, "");
       hourArray.push(
         <option key={index.toString()} value={index.toString()}>
-          {outputString}
+          {hourString}
         </option>
       );
     }

@@ -12,6 +12,7 @@ export default (props: IModalComponentProps) => {
       { name: "tfdsafsafdsafsafdssafafest" },
       { name: "afafafaaffqafafafafafasdf" },
       { name: "tesffsdafdsadfasdfasdfaafafaft" },
+      { name: "test" },
     ],
   });
 
@@ -115,10 +116,6 @@ export default (props: IModalComponentProps) => {
           <div className="form-group">
             <label htmlFor="uploader">Uploader</label>
             <input type="text" name="uploader" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="complete">Complete</label>
-            <input type="text" name="complete" />
           </div>
         </div>
       </form>

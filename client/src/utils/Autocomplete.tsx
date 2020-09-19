@@ -79,13 +79,30 @@ export default <T extends { [key: string]: any }>(
     item: any
   ) => {
     e.preventDefault();
-    console.log(autoCompleteState.selected);
     setAutoCompleteState((previousState) => {
       return {
         displayedItems: filterItems(""),
         active: false,
         selected: [...previousState.selected, item],
         filterValue: "",
+      };
+    });
+  };
+
+  const onCancelClick = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    index: number
+  ) => {
+    e.preventDefault();
+    setAutoCompleteState((previousState) => {
+      return {
+        ...previousState,
+        displayedItems: filterItems(previousState.filterValue),
+        active: false,
+        selected: [
+          ...previousState.selected.slice(0, index),
+          ...previousState.selected.slice(index + 1),
+        ],
       };
     });
   };
@@ -106,6 +123,7 @@ export default <T extends { [key: string]: any }>(
           onFocus={(e) => onFocus(e)}
           onChange={(e) => onChange(e)}
           onBlur={(e) => onBlur(e)}
+          autoComplete="off"
           type="text"
         ></input>
         {autoCompleteState.displayedItems.length > 0 &&
@@ -128,13 +146,19 @@ export default <T extends { [key: string]: any }>(
         ) : null}
       </div>
       <ul className="autocomplete-selected-container">
-        {autoCompleteState.selected.map((val: T) => {
+        {autoCompleteState.selected.map((val: T, index: number) => {
           return (
             <li
               key={`li-${val[props.itemKey]}`}
               className="autocomplete-selected"
             >
-              <i className="fa fa-times fa-xs"></i> {val[props.itemKey]}
+              <i
+                className="fa fa-times fa-xs"
+                onClick={(e) => {
+                  onCancelClick(e, index);
+                }}
+              ></i>{" "}
+              {val[props.itemKey]}
             </li>
           );
         })}
