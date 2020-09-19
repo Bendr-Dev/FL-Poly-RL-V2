@@ -54,13 +54,60 @@
 
 .autocomplete {
   position: relative;
+  max-width: 100%;
+  font-size: 1rem;
+  color: #fff;
+  background-color: rgb(17, 17, 17);
+  border-radius: 3px;
+}
+
+.autocomplete-selected-container {
+  width: 100%;
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5rem;
+  list-style-type: none;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.autocomplete-selected {
+  color: #fff;
+  display: flex;
+  height: 1rem;
+  width: 30%;
+  overflow: hidden;
+  padding: 0.6rem 0.3rem;
+  font-size: 14px;
+  background-color: var(--primary-color);
+  border-radius: 3px;
+  box-shadow: 0 0 15px 2px var(--primary-color), 3px 3px 10px 2.5px #000;
+  align-items: center;
+}
+
+.autocomplete-selected i {
+  margin-right: 0.4rem;
+}
+
+.autocomplete input {
+  max-width: 100%;
+  color: #fff;
+  padding: 0;
 }
 
 .autocomplete-results {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   width: 100%;
-  height: 200px;
-  background-color: red;
+  background-color: rgb(17, 17, 17);
+}
+
+.result-row {
+  flex-basis: 50px;
+  cursor: pointer;
 }
 
 /* Side Nav */
@@ -221,8 +268,7 @@ form {
 /** Form group */
 .form-group {
   width: 100%;
-  margin-bottom: 2rem;
-  height: 5rem;
+  margin-bottom: 3rem;
 }
 
 .form-group small {
@@ -578,8 +624,7 @@ form {
 }
 
 .event-form .form-column {
-  min-width: 28rem;
-  /* width: 25rem; */
+  width: 20rem;
   padding: 0 1.5rem;
   height: 100%;
 }

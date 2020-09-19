@@ -5,7 +5,11 @@ import Autocomplete from "../utils/Autocomplete";
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
   const [formData, setFormData] = useState({
-    test: ["test", "asdf", "tesfaafafaft"],
+    test: [
+      { name: "tfdsafsafdsafsafdssafafest" },
+      { name: "afafafaaffqafafafafafasdf" },
+      { name: "tesffsdafdsadfasdfasdfaafafaft" },
+    ],
   });
 
   const _onSubmit = () => {
@@ -42,15 +46,16 @@ export default (props: IModalComponentProps) => {
             <Autocomplete
               name="attending"
               label="Attending"
+              itemKey="name"
               items={formData.test}
             ></Autocomplete>
           </div>
+        </div>
+        <div className="form-column">
           <div className="form-group">
             <label htmlFor="link">Link</label>
             <input type="text" name="link" />
           </div>
-        </div>
-        <div className="form-column">
           <div className="form-group">
             <label htmlFor="time">Time</label>
             <input type="text" name="time" />
