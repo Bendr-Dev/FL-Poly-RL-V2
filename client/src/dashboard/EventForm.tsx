@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { isConstructorDeclaration } from "typescript";
 import { IModalComponentProps } from "../App";
 import Autocomplete from "../utils/Autocomplete";
+import { DATE_MAP } from "../utils/date";
+import Datepicker, { IDatePickerState } from "../utils/Datepicker";
 
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
@@ -11,6 +14,51 @@ export default (props: IModalComponentProps) => {
       { name: "tesffsdafdsadfasdfasdfaafafaft" },
     ],
   });
+
+  const formatDate = (datePickerValue: IDatePickerState): string => {
+    for (const [key, value] of Object.entries(datePickerValue)) {
+      if (value.length === 1) {
+        value.replace(/^/, "0");
+      }
+    }
+    return (
+      datePickerData.month +
+      " " +
+      datePickerData.day +
+      ", " +
+      datePickerData.year +
+      " " +
+      datePickerData.hour +
+      ":" +
+      datePickerData.minute
+    );
+  };
+
+  let selectedDate: Date = new Date();
+  let selectedDateString: string = "";
+  const [datePickerData, setDatePickerData] = useState<IDatePickerState>({
+    month: DATE_MAP[selectedDate.getMonth()].long,
+    day: selectedDate.getDate().toString(),
+    year: selectedDate.getFullYear().toString(),
+    hour: selectedDate.getHours().toString(),
+    minute: selectedDate.getMinutes().toString(),
+  });
+  selectedDateString = formatDate(datePickerData);
+
+  useEffect(() => {
+    selectedDate = new Date(
+      datePickerData.month +
+        " " +
+        datePickerData.day +
+        ", " +
+        datePickerData.hour +
+        ":" +
+        datePickerData.minute +
+        ":00"
+    );
+    selectedDateString = formatDate(datePickerData);
+    selectedDate = new Date(selectedDateString);
+  }, [datePickerData]);
 
   const _onSubmit = () => {
     !!onSubmit && onSubmit();
@@ -57,8 +105,12 @@ export default (props: IModalComponentProps) => {
             <input type="text" name="link" />
           </div>
           <div className="form-group">
-            <label htmlFor="time">Time</label>
-            <input type="text" name="time" />
+            <label htmlFor="time">Start Time</label>
+            <input name="time" value={selectedDateString} onChange={() => {}} />
+            <Datepicker
+              datePickerData={datePickerData}
+              setDatePickerData={setDatePickerData}
+            ></Datepicker>
           </div>
           <div className="form-group">
             <label htmlFor="uploader">Uploader</label>

@@ -43,4 +43,27 @@ tournamentRouter.get(
   }
 );
 
+/**
+ * Grabs all tournaments
+ * GET/
+ */
+tournamentRouter.get(
+  "/",
+  [auth, roles(["Guest", "Coach", "Admin", "Player", "Manager"])],
+  async (req: Request, res: Response) => {
+    try {
+      const tournaments = await Tournament.find().sort({
+        startDate: 1,
+      });
+
+      res.status(200).json(tournaments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        error: { msg: "Server error trying to grab tournaments" },
+      });
+    }
+  }
+);
+
 export default tournamentRouter;

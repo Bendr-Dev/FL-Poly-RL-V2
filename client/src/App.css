@@ -188,6 +188,36 @@ div.content-area {
   height: 100%;
 }
 
+/* Loading Spinner */
+.loading-spinner {
+  margin: auto;
+  width: 6rem;
+  height: 6rem;
+  border: 10px solid rgba(190, 0, 254, 0.4);
+  border-top: 10px solid var(--primary-color);
+  border-radius: 50%;
+  -webkit-animation: circleRotation 0.6s infinite linear;
+  animation: circleRotation 0.6s infinite linear;
+}
+
+@-webkit-keyframes circleRotation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@keyframes circleRotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
 .container {
   width: 100%;
   height: 100%;
@@ -680,6 +710,21 @@ form {
 
 .event-attending-user {
   color: #fff;
+}
+
+/* Datepicker */
+.datepicker {
+  margin: 0.5rem 0;
+}
+
+.datepicker select {
+  color: #ccc;
+  font-size: 16px;
+  background-color: #333;
+  border: none;
+  height: 1.5rem;
+  outline: none;
+  margin: 0 0.15rem;
 }
 
 @media (max-width: 400px) {

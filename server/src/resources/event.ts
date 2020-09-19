@@ -99,13 +99,6 @@ eventRouter.get("/:eventId", auth, async (req: Request, res: Response) => {
       "attending",
       ["email", "steam64Id", "username", "discordId", "name"]
     );
-    // .populate("uploader", [
-    //   "email",
-    //   "steam64Id",
-    //   "name",
-    //   "discordId",
-    //   "username",
-    // ]);
 
     if (!event) {
       return res.status(404).json({

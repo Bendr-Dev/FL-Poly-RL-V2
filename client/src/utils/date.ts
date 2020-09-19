@@ -6,7 +6,7 @@ export const DATE_MAP: {
     short: "Jan",
   },
   1: {
-    long: "Febuary",
+    long: "February",
     short: "Feb",
   },
   2: {
