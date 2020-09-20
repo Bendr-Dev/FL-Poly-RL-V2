@@ -5,6 +5,7 @@ interface IAutoCompleteProps<T> {
   label: string;
   items: T;
   itemKey: string;
+  onSelectChange: (selection: any[]) => void;
 }
 
 interface IAutoCompleteState<T> {
@@ -29,8 +30,6 @@ export default <T extends { [key: string]: any }>(
   const filterItems = (filterValue: string): T[] => {
     const { items, itemKey } = props;
     let filteredItems: T[] = [];
-
-    console.log(filterValue, autoCompleteState.selected);
 
     filteredItems = items.filter((item: T) => {
       return (
@@ -79,6 +78,7 @@ export default <T extends { [key: string]: any }>(
     item: any
   ) => {
     e.preventDefault();
+    props.onSelectChange([...autoCompleteState.selected, item]);
     setAutoCompleteState((previousState) => {
       return {
         displayedItems: filterItems(""),
@@ -94,6 +94,10 @@ export default <T extends { [key: string]: any }>(
     index: number
   ) => {
     e.preventDefault();
+    props.onSelectChange([
+      ...autoCompleteState.selected.slice(0, index),
+      ...autoCompleteState.selected.slice(index + 1),
+    ]);
     setAutoCompleteState((previousState) => {
       return {
         ...previousState,

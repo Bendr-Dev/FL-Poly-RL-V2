@@ -8,6 +8,7 @@ import Datepicker, { IDatePickerState } from "../utils/Datepicker";
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
   const [formData, setFormData] = useState({
+    attending: [] as any[],
     test: [
       { name: "tfdsafsafdsafsafdssafafest" },
       { name: "afafafaaffqafafafafafasdf" },
@@ -71,6 +72,10 @@ export default (props: IModalComponentProps) => {
     onModalCleanup();
   };
 
+  const onSelectChange = (selection: any[]) => {
+    console.log(selection);
+  };
+
   return (
     <div className="event-form">
       <div className="form-header">
@@ -97,6 +102,7 @@ export default (props: IModalComponentProps) => {
               label="Attending"
               itemKey="name"
               items={formData.test}
+              onSelectChange={onSelectChange}
             ></Autocomplete>
           </div>
         </div>
