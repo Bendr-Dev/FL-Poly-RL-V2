@@ -35,6 +35,10 @@ export default () => {
     getTournaments();
   }, [numberOfTournaments]);
 
+  /**
+   * Directs user to tournament component to view more data
+   * @param tournament (ITournament): tournament to get more insights/stats
+   */
   const onClick = (tournament: ITournament) => {
     history.push(`/tournaments/${tournament.eventId}`, tournament);
   };
