@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ITournament } from "../common/Tournament.Interface";
 import { getData } from "../utils/http";
-import { AlertContext } from "../App";
 import { useHistory } from "react-router-dom";
 
 export default () => {

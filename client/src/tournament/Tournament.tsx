@@ -8,7 +8,14 @@ export default (props: any) => {
   const history = useHistory();
 
   const goBack = () => {
-    history.push(`/tournaments/`);
+    history.goBack();
+  };
+
+  const onClick = (match: any) => {
+    history.push(
+      `/tournaments/${props.location.state.eventId}/match/${match._id}`,
+      match
+    );
   };
 
   useEffect(() => {
@@ -42,7 +49,11 @@ export default (props: any) => {
         <div className="line-break-primary"></div>
         {matches.map((match: IMatch) => {
           return (
-            <div className="tm-match" key={match.replayId}>
+            <div
+              className="tm-match"
+              key={match.replayId}
+              onClick={() => onClick(match)}
+            >
               <div className="tm-match-orange">
                 <div>
                   <h3>{match.orange.name}</h3>

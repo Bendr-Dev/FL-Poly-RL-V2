@@ -14,6 +14,7 @@ import { PlayerStat } from "./stat/PlayerStat";
 import Modal from "./utils/Modal";
 import { IUser } from "./common/User.Interface";
 import Tournament from "./tournament/Tournament";
+import MatchStat from "./stat/MatchStat";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -163,6 +164,13 @@ export default () => {
                       exact
                       path="/tournaments/:id"
                       component={Tournament}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/tournaments/:id/match/:matchid"
+                      component={MatchStat}
                       isLoggedIn={authState.isLoggedIn}
                       loading={authState.isLoggedIn}
                     />
