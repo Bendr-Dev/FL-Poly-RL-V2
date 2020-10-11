@@ -336,4 +336,9 @@ const processStatMetaData = async (
   return [matchMetadata, statMetadata];
 };
 
+/**
+ * GET match stats from db
+ * /match/:matchId
+ */
+
 export default statsRouter;

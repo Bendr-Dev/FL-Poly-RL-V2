@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { ITournament } from "../common/Tournament.Interface";
 import { getData } from "../utils/http";
 
 export default () => {
-  const [tournaments, setTournaments] = useState<any>([]);
+  const [tournaments, setTournaments] = useState<ITournament[]>([]);
 
   useEffect(() => {
     const data = async () => {
