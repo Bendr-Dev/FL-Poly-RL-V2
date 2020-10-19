@@ -726,11 +726,8 @@ form {
   text-align: center;
 }
 
-.tm-header i {
-  cursor: pointer;
-}
-
 .tm-header i:hover {
+  cursor: pointer;
   color: #ccc;
 }
 
@@ -792,6 +789,53 @@ form {
 .tm-match-blue div:first-of-type {
   color: #0c2cfc;
   margin: 0 1rem;
+}
+
+/* Match stats */
+.ms-container {
+  width: 100%;
+}
+
+.ms-header {
+  margin: 1rem;
+  display: flex;
+  color: #fff;
+  background-color: var(--card-gray);
+  box-shadow: 4px 4px 5px #0c0d0e;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.ms-header > div:first-of-type {
+  margin: 0;
+  width: 10%;
+}
+
+.ms-header > div {
+  margin: 0 4rem;
+  width: 90%;
+}
+
+.ms-header i:hover {
+  cursor: pointer;
+  color: #ccc;
+}
+
+.ms-home-color {
+  color: #ff9f00;
+}
+
+.ms-away-color {
+  color: #0c2cfc;
+}
+
+.ms-players {
+  margin: 1rem;
+  color: #fff;
+  background-color: var(--card-gray);
+  box-shadow: 4px 4px 5px #0c0d0e;
+  display: flex;
 }
 
 @media (max-width: 400px) {
