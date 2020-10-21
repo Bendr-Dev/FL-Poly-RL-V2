@@ -5,8 +5,8 @@ import { useHistory } from "react-router-dom";
 
 export default () => {
   const [tournaments, setTournaments] = useState<ITournament[]>([]);
-  let numberOfTournaments: number = 25;
-  let isMoreTournaments: boolean = false;
+  const [isMoreTournaments, setIsMoreTournaments] = useState<Boolean>(false);
+  const [numberOfTournaments, setNumberOfTournaments] = useState<number>(8);
   const history = useHistory();
 
   /**
@@ -24,9 +24,9 @@ export default () => {
 
       // Check if there are more tournaments to possibly display
       if (tournaments.length < numberOfTournaments) {
-        isMoreTournaments = false;
+        setIsMoreTournaments(false);
       } else {
-        isMoreTournaments = true;
+        setIsMoreTournaments(true);
       }
 
       !!tournaments && setTournaments(tournaments);
@@ -38,10 +38,15 @@ export default () => {
    * Directs user to tournament component to view more data
    * @param tournament (ITournament): tournament to get more insights/stats
    */
-  const onClick = (tournament: ITournament) => {
+  const onClickReroute = (tournament: ITournament) => {
     history.push(`/tournaments/${tournament.eventId}`, tournament);
   };
 
+  const onClickPopulate = () => {
+    setNumberOfTournaments(2 * numberOfTournaments);
+    console.log(numberOfTournaments);
+  }
+  console.log(isMoreTournaments);
   return (
     <div className="tournament-list">
       <div className="tournament-header">
@@ -52,7 +57,7 @@ export default () => {
           <div
             className="tournament-item"
             key={tournament.eventId}
-            onClick={() => onClick(tournament)}
+            onClick={() => onClickReroute(tournament)}
           >
             <span>{tournament.startTime.toString().slice(0, 10)}</span>
             <span>{tournament.name}</span>
@@ -60,6 +65,12 @@ export default () => {
           </div>
         );
       })}
+      <div className="tournament-list-actions">
+      {isMoreTournaments && 
+        <input className="btn" type="submit" onClick={() => onClickPopulate()} value="Get more Tournaments"/>   
+      }
+      </div>
+      
     </div>
   );
 };
