@@ -11,7 +11,11 @@ export default (props: any) => {
     history.goBack();
   };
 
-  const onClick = (match: any) => {
+  /**
+   * Routes user to spccific match page
+   * @param match: match user is viewing 
+   */
+  const onClickReroute = (match: any) => {
     history.push(
       `/tournaments/${props.location.state.eventId}/match/${match._id}`,
       match
@@ -52,23 +56,23 @@ export default (props: any) => {
             <div
               className="tm-match"
               key={match.replayId}
-              onClick={() => onClick(match)}
+              onClick={() => onClickReroute(match)}
             >
               <div className="tm-match-orange">
                 <div>
-                  <h3>{match.orange.name}</h3>
+                  <p>{match.orange.name}</p>
                 </div>
                 <div>
-                  <h3>{match.orange.goals}</h3>
+                  <p>{match.orange.goals}</p>
                 </div>
               </div>
               {"-"}
               <div className="tm-match-blue">
                 <div>
-                  <h3>{match.blue.goals}</h3>
+                  <p>{match.blue.goals}</p>
                 </div>
                 <div>
-                  <h3>{match.blue.name}</h3>
+                  <p>{match.blue.name}</p>
                 </div>
               </div>
             </div>

@@ -2,10 +2,10 @@ export interface IStat {
   matchId: string;
   blue: {
     players: [{}];
-    stats: {};
+    stats: any;
   };
   orange: {
     players: [{}];
-    stats: {};
+    stats: any;
   };
 }
