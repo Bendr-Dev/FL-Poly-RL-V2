@@ -8,11 +8,13 @@ import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import { getData } from "./utils/http";
-import { Tournament } from "./tournament/Tournament";
+import TournamentList from "./tournament/TournamentList";
 import { TeamStat } from "./stat/TeamStat";
 import { PlayerStat } from "./stat/PlayerStat";
 import Modal from "./utils/Modal";
 import { IUser } from "./common/User.Interface";
+import Tournament from "./tournament/Tournament";
+import MatchStat from "./stat/MatchStat";
 
 export interface IAuthState {
   isLoggedIn: boolean;
@@ -140,7 +142,7 @@ export default () => {
                     <ProtectedRoute
                       exact
                       path="/tournaments"
-                      component={Tournament}
+                      component={TournamentList}
                       isLoggedIn={authState.isLoggedIn}
                       loading={authState.isLoggedIn}
                     />
@@ -155,6 +157,20 @@ export default () => {
                       exact
                       path="/playerstats"
                       component={PlayerStat}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/tournaments/:id"
+                      component={Tournament}
+                      isLoggedIn={authState.isLoggedIn}
+                      loading={authState.isLoggedIn}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path="/tournaments/:id/match/:matchid"
+                      component={MatchStat}
                       isLoggedIn={authState.isLoggedIn}
                       loading={authState.isLoggedIn}
                     />
