@@ -110,7 +110,9 @@ statsRouter.get(
           await processedStatMetaData.save();
         } else {
           // Delete all the saved data associated with event so user can retry to collect all data
-          Stat.deleteMany({ matchId: matchMetaData[0]._id });
+          matchMetaData.forEach((match: IMatchDocument) => {
+            Stat.deleteMany({ matchId: match._id});
+          })
           Match.deleteMany({ tournamentId: tournamentMetadata._id });
           Tournament.findByIdAndDelete(tournamentMetadata._id);
 
