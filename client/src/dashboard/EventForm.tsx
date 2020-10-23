@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { isConstructorDeclaration } from "typescript";
 import { IModalComponentProps } from "../App";
 import Autocomplete from "../utils/Autocomplete";
 import { DATE_MAP } from "../utils/date";

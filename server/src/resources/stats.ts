@@ -30,11 +30,10 @@ const statsRouter = express.Router();
  * GET/bc/:eventId
  */
 statsRouter.get(
-  "/bc/:eventId",
+  "/bc/:eventId/:endTime",
   [
     auth,
     roles(["Player", "Manager", "Coach", "Admin"]),
-    check("endTime", "Event end time is required").not().isEmpty(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -43,9 +42,8 @@ statsRouter.get(
       return res.status(400).json(errors);
     }
 
-    const { eventId } = req.params;
+    const { eventId, endTime } = req.params;
 
-    const { endTime } = req.body;
     try {
       const event = await getEvent(eventId);
 
@@ -76,6 +74,15 @@ statsRouter.get(
         event
       );
 
+      // Checks if tournament data exists already in db
+      if((await Tournament.find({ eventId: eventId})).length > 0) {
+        return res.status(409).json({
+          error: {
+            msg: `Tournament data already found for event with id ${eventId}`,
+          }
+        })
+      }
+
       // Format Tournament metadata into Document and save
       const tournamentMetadata: ITournamentDocument = await saveTournamentMetadata(
         startTimeConverted,
@@ -98,22 +105,23 @@ statsRouter.get(
           processedStatMetaData,
         ] = await processStatMetaData(matchMetaData[i]);
 
-        await processedMatchMetadata.save();
-        await processedStatMetaData.save();
+        if( processedMatchMetadata !== "Failed" && processedStatMetaData !== "Failed") {
+          await processedMatchMetadata.save();
+          await processedStatMetaData.save();
+        } else {
+          // Delete all the saved data associated with event so user can retry to collect all data
+          Stat.deleteMany({ matchId: matchMetaData[0]._id });
+          Match.deleteMany({ tournamentId: tournamentMetadata._id });
+          Tournament.findByIdAndDelete(tournamentMetadata._id);
+
+          return res.status(409).json({ error: {
+              msg: `Processing tournament data for event ${eventId} has failed, please try again later` 
+            }
+          })
+        }
       }
 
-      // Create response body
-      const result = {
-        name: event.name,
-        numberOfWins: numOfWins,
-        numberOfMatches: numOfMatches,
-        numberOfLosses: numOfMatches - numOfWins,
-        startTime: startTimeConverted,
-        endTime: endTimeConverted,
-        matches: matchMetaData,
-      };
-
-      res.status(200).json(result);
+      res.status(200).json({ msg: "Successfully parsed tournament data!"});
     } catch (err) {
       console.error(err);
       res.status(500).json({
@@ -304,7 +312,7 @@ const processMatchMetadata = (
  */
 const processStatMetaData = async (
   matchMetadata: IMatchDocument
-): Promise<[IMatchDocument, IStatDocument]> => {
+): Promise<[IMatchDocument, IStatDocument] | ["Failed", "Failed"]> => {
   const statResponse = await axios({
     method: "GET",
     url: `https://ballchasing.com/api/replays/${matchMetadata.replayId}`,
@@ -319,6 +327,10 @@ const processStatMetaData = async (
   matchMetadata.blue.name === "FLORIDA POLY" &&
     !!statResponse.data.orange.name &&
     (matchMetadata.orange.name = statResponse.data.orange.name);
+
+  if( statResponse.data.status === ("failed" || "pending")) {
+    return ["Failed", "Failed"];
+  }
 
   // Create stat document
   const statMetadata: IStatDocument = new Stat({

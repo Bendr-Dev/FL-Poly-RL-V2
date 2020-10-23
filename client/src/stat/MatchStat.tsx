@@ -340,33 +340,36 @@ if(matchStats) {
       </div>
       <div className="ms-players">
         <table className="ms-orange">
-          <tr>
-            <td>Name</td>
-            <td>Score</td>
-            <td>Goals</td>
-            <td>Assists</td>
-            <td>Saves</td>
-            <td>Shots</td>
-          </tr>
-          {matchStats.orange.players.map((player: any) => {
-            return (<tr className="ms-player" key={player.name}>
-                <td>{player.name}</td>
-                <td>{player.stats.core.score}</td>
-                <td>{player.stats.core.goals}</td>
-                <td>{player.stats.core.assists}</td>
-                <td>{player.stats.core.saves}</td>
-                <td>{player.stats.core.shots}</td>
-              </tr>);
-          })}
-          <tr>
-            <td colSpan={2}>Total</td>
-            <td>{matchStats.orange.stats.core.goals}</td>
-            <td>{matchStats.orange.stats.core.assists}</td>
-            <td>{matchStats.orange.stats.core.saves}</td>
-            <td>{matchStats.orange.stats.core.shots}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>Score</td>
+              <td>Goals</td>
+              <td>Assists</td>
+              <td>Saves</td>
+              <td>Shots</td>
+            </tr>
+            {matchStats.orange.players.map((player: any) => {
+              return (<tr className="ms-player" key={player.name}>
+                  <td>{player.name}</td>
+                  <td>{player.stats.core.score}</td>
+                  <td>{player.stats.core.goals}</td>
+                  <td>{player.stats.core.assists}</td>
+                  <td>{player.stats.core.saves}</td>
+                  <td>{player.stats.core.shots}</td>
+                </tr>);
+            })}
+            <tr>
+              <td colSpan={2}>Total</td>
+              <td>{matchStats.orange.stats.core.goals}</td>
+              <td>{matchStats.orange.stats.core.assists}</td>
+              <td>{matchStats.orange.stats.core.saves}</td>
+              <td>{matchStats.orange.stats.core.shots}</td>
+            </tr>
+          </tbody>
         </table>
         <table className="ms-blue">
+          <tbody>
           <tr>
             <td>Name</td>
             <td>Score</td>
@@ -392,6 +395,7 @@ if(matchStats) {
             <td>{matchStats.blue.stats.core.saves}</td>
             <td>{matchStats.blue.stats.core.shots}</td>
           </tr>
+          </tbody>
         </table>
       </div>
       <div>

@@ -680,6 +680,10 @@ form {
   width: 100%;
 }
 
+.event-submit > div {
+  color: #ccc;
+}
+
 .event-column {
   display: flex;
   flex-direction: column;

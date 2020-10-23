@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { DATE_MAP } from "../utils/date";
 
 export interface IDatePickerState {

@@ -1,15 +1,81 @@
-import React from "react";
-import { IModalComponentProps } from "../App";
+import React, { useContext, useEffect, useState } from "react";
+import { AlertContext, IModalComponentProps } from "../App";
 import { IUser } from "../common/User.Interface";
 import { Link } from "react-router-dom";
-import { link } from "fs";
+import { getData, updateData } from "../utils/http";
+import Datepicker, { IDatePickerState } from "../utils/Datepicker";
+import { DATE_MAP } from "../utils/date";
+import { createAlert } from "../utils/Alert";
+import { IEvent } from "../common/Event.Interface";
 
 export default (props: IModalComponentProps) => {
   const { componentState, onModalCleanup } = props;
+  const [ alertState, setAlertState ] = useContext(AlertContext);
+
+  const formatDate = (datePickerValue: IDatePickerState): string => {
+    for (const [key, value] of Object.entries(datePickerValue)) {
+      if (value.length === 1) {
+        value.replace(/^/, "0");
+      }
+    }
+    return (
+      datePickerData.month +
+      " " +
+      datePickerData.day +
+      ", " +
+      datePickerData.year +
+      " " +
+      datePickerData.hour +
+      ":" +
+      datePickerData.minute
+    );
+  };
+
+  let selectedDate: Date = new Date();
+  let selectedDateString: string = "";
+  const [datePickerData, setDatePickerData] = useState<IDatePickerState>({
+    month: DATE_MAP[selectedDate.getMonth()].long,
+    day: selectedDate.getDate().toString(),
+    year: selectedDate.getFullYear().toString(),
+    hour: selectedDate.getHours().toString(),
+    minute: selectedDate.getMinutes().toString(),
+  });
+  selectedDateString = formatDate(datePickerData);
 
   const event = componentState.event;
 
   const formatTime = componentState.formatTime;
+
+  useEffect(() => {
+    selectedDate = new Date(
+      datePickerData.month +
+        " " +
+        datePickerData.day +
+        ", " +
+        datePickerData.hour +
+        ":" +
+        datePickerData.minute +
+        ":00"
+    );
+    selectedDateString = formatDate(datePickerData);
+    selectedDate = new Date(selectedDateString);
+  }, [datePickerData]);
+
+  const onClickGetData = async (eventId: string) => {
+    try {
+      await getData(`/api/stats/bc/${eventId}/${selectedDate}`);
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  const onClickCompleteEvent = async (eventId: string) => {
+    const updatedEvent: IEvent = {
+      ...event,
+      isCompleted: true
+    }
+    await updateData(`/api/events/edit/${eventId}`, updatedEvent);
+  }
 
   return (
     <div className="event-form">
@@ -62,8 +128,18 @@ export default (props: IModalComponentProps) => {
               </div>
             )}
           </div>
-          {event.isCompleted ? (
-            <input className="btn" type="submit" value="Get Data" />
+          {!event.isCompleted ? (
+            <input className="btn" type="submit" value="Complete Event" onClick={() => onClickCompleteEvent(event._id)} />
+            ): null }
+          {event.isCompleted && event.type === "Tournament" ? (
+            <div className="event-submit">
+              <div>End Time:</div>
+              <Datepicker
+                datePickerData={datePickerData}
+                setDatePickerData={setDatePickerData}>
+              </Datepicker>
+              <input className="btn" type="submit" value="Get Data" onClick={() => onClickGetData(event._id)}/>
+            </div>
           ) : null}
         </div>
       </div>

@@ -30,7 +30,7 @@ export const createAlert = (
 };
 
 export default () => {
-  const [alertState, setAlertStart] = useContext(AlertContext);
+  const [alertState, setAlertState] = useContext(AlertContext);
 
   const getClass = (alert: any): string => {
     const classes = ["alert"];
@@ -41,7 +41,7 @@ export default () => {
   useEffect(() => {
     if (alertState.alerts[0]) {
       const timer = setTimeout(() => {
-        setAlertStart((currentState: IAlertState) => {
+        setAlertState((currentState: IAlertState) => {
           return {
             alerts: currentState.alerts.slice(1),
           };
@@ -49,7 +49,7 @@ export default () => {
       }, alertState.alerts[0].duration);
       return () => clearTimeout(timer);
     }
-  }, [alertState.alerts, setAlertStart]);
+  }, [alertState.alerts, setAlertState]);
 
   return (
     <Fragment>
