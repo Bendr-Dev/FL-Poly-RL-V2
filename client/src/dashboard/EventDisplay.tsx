@@ -10,7 +10,7 @@ import { IEvent } from "../common/Event.Interface";
 
 export default (props: IModalComponentProps) => {
   const { componentState, onModalCleanup } = props;
-  const [ alertState, setAlertState ] = useContext(AlertContext);
+  const [alertState] = useContext(AlertContext);
 
   const formatDate = (datePickerValue: IDatePickerState): string => {
     for (const [key, value] of Object.entries(datePickerValue)) {
@@ -61,20 +61,48 @@ export default (props: IModalComponentProps) => {
     selectedDate = new Date(selectedDateString);
   }, [datePickerData]);
 
+  /**
+   * Grabs event data from ballchasing with user click
+   * @param eventId: event id to pull stats from
+   */
   const onClickGetData = async (eventId: string) => {
     try {
-      await getData(`/api/stats/bc/${eventId}/${selectedDate}`);
+      const response = await getData(`/api/stats/bc/${eventId}/${selectedDate}`);
+
+      if((response[1] as any).error.msg !== null || undefined) {
+        alertState.alerts.push(createAlert((response[1] as any).error.msg, 5000, "warn"));
+      } else if((response[0].msg !== null || undefined)) {
+        alertState.alerts.push(createAlert(response[0].msg, 5000, "success"));
+      }
+
+      onModalCleanup();
     } catch(error) {
       console.error(error);
     }
   }
 
+  /**
+   * Updates event on user click to be completed
+   * @param eventId: event id to use to update event in db
+   */
   const onClickCompleteEvent = async (eventId: string) => {
-    const updatedEvent: IEvent = {
-      ...event,
-      isCompleted: true
+    try {
+      const updatedEvent: IEvent = {
+        ...event,
+        isCompleted: true
+      }
+      const response = await updateData(`/api/events/edit/${eventId}`, updatedEvent);
+      console.log(response)
+      if(response[0] !== null) {
+        alertState.alerts.push(createAlert(response[0].msg, 5000, "warn"));
+      } else {
+        alertState.alerts.push(createAlert("Successfully updated Event", 5000, "success"));
+      }
+
+      onModalCleanup();
+    } catch (error) {
+      console.error(error);
     }
-    await updateData(`/api/events/edit/${eventId}`, updatedEvent);
   }
 
   return (
