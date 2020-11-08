@@ -35,7 +35,7 @@ export default (props: any) => {
       !!matches && setMatches(matches);
     };
     getMatches();
-  }, []);
+  });
 
   return (
     <div className="tournament-match">

@@ -44,7 +44,7 @@ export default () => {
 
   useEffect(() => {
     data();
-  }, []);
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {

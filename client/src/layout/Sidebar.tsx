@@ -37,38 +37,7 @@ export default () => {
         </NavLink>
       </div>
 
-      <div className="route">
-        <NavLink to="/teamstats" activeClassName="selected-route">
-          <div>
-            <div className="route-content">
-              <div>
-                <i className="fa fa-users" />
-              </div>
-              <div>
-                <span>Team</span>
-              </div>
-            </div>
-          </div>
-        </NavLink>
-      </div>
-
-      <div className="route">
-        <NavLink to="/playerstats" activeClassName="selected-route">
-          <div>
-            <div className="route-content">
-              <div>
-                <i className="fa fa-user" />
-              </div>
-              <div>
-                <span>Players</span>
-              </div>
-            </div>
-          </div>
-        </NavLink>
-      </div>
-
       <div className="footer">
-        <div>Account</div>
         <div>Sign out</div>
       </div>
     </nav>

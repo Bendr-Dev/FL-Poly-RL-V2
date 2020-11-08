@@ -49,7 +49,7 @@ export default () => {
       }, alertState.alerts[0].duration);
       return () => clearTimeout(timer);
     }
-  }, [alertState.alerts.length, setAlertState]);
+  }, [alertState.alerts.length, setAlertState, alertState.alerts]);
 
   return (
     <Fragment>

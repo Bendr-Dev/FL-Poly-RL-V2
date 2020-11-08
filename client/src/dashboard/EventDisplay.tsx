@@ -7,6 +7,7 @@ import Datepicker, { IDatePickerState } from "../utils/Datepicker";
 import { DATE_MAP } from "../utils/date";
 import { createAlert } from "../utils/Alert";
 import { IEvent } from "../common/Event.Interface";
+import { IStat } from "../../../common/interfaces/Stat.Interface";
 
 export default (props: IModalComponentProps) => {
   const { componentState, onModalCleanup } = props;
@@ -67,14 +68,14 @@ export default (props: IModalComponentProps) => {
    */
   const onClickGetData = async (eventId: string) => {
     try {
-      const response = await getData(`/api/stats/bc/${eventId}/${selectedDate}`);
+      const [error, response] = await getData<IStat>(`/api/stats/bc/${eventId}/${selectedDate}`);
 
-      if((response[1] as any).error.msg !== null || undefined) {
-        alertState.alerts.push(createAlert((response[1] as any).error.msg, 5000, "warn"));
-      } else if((response[0].msg !== null || undefined)) {
-        alertState.alerts.push(createAlert(response[0].msg, 5000, "success"));
+      if(error !== null || undefined) {
+        alertState.alerts.push(createAlert(error.msg, 5000, "warn"));
       }
-
+      
+      alertState.alerts.push(createAlert("Data was successfully obtained", 5000, "success"));
+      
       onModalCleanup();
     } catch(error) {
       console.error(error);
@@ -91,13 +92,13 @@ export default (props: IModalComponentProps) => {
         ...event,
         isCompleted: true
       }
-      const response = await updateData(`/api/events/edit/${eventId}`, updatedEvent);
-      console.log(response)
-      if(response[0] !== null) {
-        alertState.alerts.push(createAlert(response[0].msg, 5000, "warn"));
-      } else {
-        alertState.alerts.push(createAlert("Successfully updated Event", 5000, "success"));
+
+      const [error, response] = await updateData(`/api/events/edit/${eventId}`, updatedEvent);
+      if(error !== null) {
+        alertState.alerts.push(createAlert(error.msg, 5000, "warn"));
       }
+      
+      alertState.alerts.push(createAlert("Successfully updated Event", 5000, "success"));
 
       onModalCleanup();
     } catch (error) {

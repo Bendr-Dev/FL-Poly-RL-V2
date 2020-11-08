@@ -1,20 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { IModalComponentProps } from "../App";
+import { IUser } from "../common/User.Interface";
 import Autocomplete from "../utils/Autocomplete";
 import { DATE_MAP } from "../utils/date";
 import Datepicker, { IDatePickerState } from "../utils/Datepicker";
+import { getData } from "../utils/http";
 
 export default (props: IModalComponentProps) => {
   const { onSubmit, onCancel, onModalCleanup } = props;
+
   const [formData, setFormData] = useState({
     attending: [] as any[],
-    test: [
-      { name: "tfdsafsafdsafsafdssafafest" },
-      { name: "afafafaaffqafafafafafasdf" },
-      { name: "tesffsdafdsadfasdfasdfaafafaft" },
-      { name: "test" },
-    ],
+    users: [] as any[],
   });
+
+  const getUsers = async () => {
+    const [errors, users] = await getData<IUser[]>("/api/users/all");
+
+    if (errors) {
+      console.error(errors);
+    }
+
+    const userNames: any[] = [];
+    !!users && users.forEach((user: IUser) => {
+      userNames.push(user.username);
+    })
+
+    !!userNames && setFormData({ attending: [], users: userNames});
+    console.log(userNames);
+  }
 
   const formatDate = (datePickerValue: IDatePickerState): string => {
     for (const [key, value] of Object.entries(datePickerValue)) {
@@ -100,7 +114,7 @@ export default (props: IModalComponentProps) => {
               name="attending"
               label="Attending"
               itemKey="name"
-              items={formData.test}
+              items={formData.users}
               onSelectChange={onSelectChange}
             ></Autocomplete>
           </div>

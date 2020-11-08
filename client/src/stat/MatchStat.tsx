@@ -23,7 +23,7 @@ export default (props: any) => {
       !!stats && setStats(stats);
     }
     getMatchStats();
-  }, [])
+  });
 
 if(matchStats) {
   /* Match statistics - formatted for ChartJS */
