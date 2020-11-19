@@ -1,4 +1,4 @@
-export const postData = async (url: string, data: any) => {
+export const postData = async (url: string, data?: any) => {
   let payload: any = {};
   let error = null;
   try {

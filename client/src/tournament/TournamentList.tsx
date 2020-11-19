@@ -44,9 +44,8 @@ export default () => {
 
   const onClickPopulate = () => {
     setNumberOfTournaments(2 * numberOfTournaments);
-    console.log(numberOfTournaments);
   }
-  console.log(isMoreTournaments);
+  
   return (
     <div className="tournament-list">
       <div className="tournament-header">

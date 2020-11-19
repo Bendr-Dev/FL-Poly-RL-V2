@@ -1,7 +1,24 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { NavLink, Redirect } from "react-router-dom";
+import { AuthContext } from "../App";
 
 export default () => {
+  const [auth, setAuth] = useContext(AuthContext);
+
+  const signout = () => {
+    try {
+      setAuth({
+        isLoggedIn: false,
+        user: {},
+        loading: false
+      });
+      
+      return (<Redirect to="/login" />);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <nav className="side-nav">
       <div>
@@ -38,7 +55,7 @@ export default () => {
       </div>
 
       <div className="footer">
-        <div>Sign out</div>
+        <div onClick={() => { signout() }}>Sign out</div>
       </div>
     </nav>
   );

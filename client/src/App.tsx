@@ -55,6 +55,7 @@ export const AuthContext = createContext<
   },
   () => {},
 ]);
+
 export const ModalContext = createContext<
   [IModalState, React.Dispatch<React.SetStateAction<IModalState>>]
 >([
@@ -72,6 +73,7 @@ export default () => {
     user: {},
     loading: true,
   });
+
   const [alertState, setAlertState] = useState<IAlertState>({
     alerts: [],
   });
